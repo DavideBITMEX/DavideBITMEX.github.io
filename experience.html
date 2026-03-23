@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Experience — Your Name</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root, [data-theme="dark"] {
+      --bg:       #0f0f0e;
+      --bg2:      #181816;
+      --bg3:      #1f1f1c;
+      --ink:      #e8e6e0;
+      --ink-mid:  #9a9890;
+      --ink-soft: #5a5850;
+      --accent:   #4a90d9;
+      --accent2:  #e05c4a;
+      --rule:     #2a2a26;
+      --serif: 'EB Garamond', Georgia, serif;
+      --mono:  'DM Mono', monospace;
+      --nav-h: 56px;
+    }
+    [data-theme="light"] {
+      --bg:       #f7f6f2;
+      --bg2:      #eeede8;
+      --bg3:      #e6e4de;
+      --ink:      #1a1a18;
+      --ink-mid:  #4a4a44;
+      --ink-soft: #8a8a82;
+      --accent:   #2d5a8e;
+      --accent2:  #c0392b;
+      --rule:     #d4d3cc;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--ink); font-family: var(--serif); font-size: 18px; line-height: 1.7; transition: background 0.3s, color 0.3s; }
+
+    /* ── NAV ── */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; background: var(--bg); border-bottom: 1px solid var(--rule); height: var(--nav-h); display: flex; align-items: center; padding: 0 2.5rem; justify-content: space-between; transition: background 0.3s, border-color 0.3s; }
+    .nav-logo { font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.08em; color: var(--ink-mid); text-decoration: none; flex-shrink: 0; }
+    .nav-logo span { color: var(--accent); }
+    .nav-center { display: flex; gap: 1.8rem; list-style: none; align-items: center; }
+    .nav-center a { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-mid); text-decoration: none; transition: color 0.2s; white-space: nowrap; }
+    .nav-center a:hover, .nav-center a.active { color: var(--accent); }
+    .nav-center .sep { width: 1px; height: 16px; background: var(--rule); flex-shrink: 0; }
+    .nav-center a.personal { color: var(--ink-soft); }
+    .nav-center a.personal:hover { color: var(--accent2); }
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+    .theme-toggle { background: none; border: 1px solid var(--rule); color: var(--ink-soft); cursor: pointer; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.35rem 0.7rem; transition: border-color 0.2s, color 0.2s; white-space: nowrap; }
+    .theme-toggle:hover { border-color: var(--ink-soft); color: var(--ink); }
+    .nav-burger { display: none; flex-direction: column; justify-content: center; gap: 5px; width: 32px; height: 32px; background: none; border: none; cursor: pointer; padding: 4px; }
+    .nav-burger span { display: block; width: 100%; height: 1px; background: var(--ink-mid); transition: transform 0.25s ease, opacity 0.25s ease; transform-origin: center; }
+    .nav-burger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .nav-burger.open span:nth-child(2) { opacity: 0; }
+    .nav-burger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+    .nav-drawer { display: none; position: fixed; top: var(--nav-h); left: 0; right: 0; background: var(--bg); border-bottom: 1px solid var(--rule); z-index: 190; flex-direction: column; padding: 1.5rem 2rem 2rem; transition: background 0.3s; }
+    .nav-drawer.open { display: flex; }
+    .nav-drawer a { font-family: var(--mono); font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-mid); text-decoration: none; padding: 0.9rem 0; border-bottom: 1px solid var(--rule); transition: color 0.2s; }
+    .nav-drawer a:last-of-type { border-bottom: none; }
+    .nav-drawer a:hover { color: var(--accent); }
+    .nav-drawer a.personal { color: var(--ink-soft); }
+    .nav-drawer .drawer-theme { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--rule); }
+    .drawer-theme-btn { background: none; border: 1px solid var(--rule); color: var(--ink-soft); cursor: pointer; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.6rem 1rem; width: 100%; text-align: left; }
+
+    /* ── PAGE HEADER ── */
+    .page-header { padding: calc(var(--nav-h) + 4rem) 4rem 4rem; border-bottom: 1px solid var(--rule); max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 2rem; }
+    .page-eyebrow { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.8rem; }
+    .page-title { font-size: clamp(2.2rem, 4vw, 3.4rem); font-weight: 400; line-height: 1.1; }
+    .page-title em { font-style: italic; color: var(--ink-mid); }
+    .cv-download { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.7rem 1.2rem; border: 1px solid var(--rule); color: var(--ink-mid); text-decoration: none; transition: all 0.2s; white-space: nowrap; display: flex; align-items: center; gap: 0.5rem; align-self: end; }
+    .cv-download:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── LAYOUT ── */
+    .content-wrap { max-width: 1100px; margin: 0 auto; padding: 0 4rem; }
+
+    /* ── SECTION BLOCK ── */
+    .section-block { padding: 4rem 0; border-bottom: 1px solid var(--rule); }
+    .section-block:last-child { border-bottom: none; padding-bottom: 6rem; }
+    .section-label { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 3rem; display: flex; align-items: center; gap: 1rem; }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+
+    /* ── TIMELINE ── */
+    .timeline { display: flex; flex-direction: column; position: relative; }
+
+    /* Vertical line */
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 19px; /* centre of the 40px dot column */
+      top: 8px;
+      bottom: 8px;
+      width: 1px;
+      background: var(--rule);
+    }
+
+    .tl-entry {
+      display: grid;
+      grid-template-columns: 40px 1fr;
+      gap: 0 2rem;
+      margin-bottom: 3rem;
+      position: relative;
+    }
+    .tl-entry:last-child { margin-bottom: 0; }
+
+    /* Dot on the line */
+    .tl-dot {
+      width: 9px; height: 9px;
+      border: 1px solid var(--accent);
+      border-radius: 50%;
+      background: var(--bg);
+      margin-top: 6px;
+      flex-shrink: 0;
+      z-index: 1;
+      justify-self: center;
+      transition: background 0.3s;
+    }
+    .tl-entry:hover .tl-dot { background: var(--accent); }
+
+    /* Card */
+    .tl-card {
+      background: var(--bg2);
+      border: 1px solid var(--rule);
+      padding: 2rem 2.2rem;
+      transition: border-color 0.2s, background 0.3s;
+    }
+    .tl-card:hover { border-color: var(--ink-soft); }
+
+    /* Card header */
+    .tl-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1.5rem;
+      margin-bottom: 1.2rem;
+    }
+    .tl-card-left { flex: 1; }
+    .tl-period {
+      font-family: var(--mono); font-size: 0.63rem;
+      letter-spacing: 0.1em; color: var(--ink-soft);
+      margin-bottom: 0.4rem;
+    }
+    .tl-role {
+      font-family: var(--mono); font-size: 0.68rem;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 0.3rem;
+    }
+    .tl-institution-row { display: flex; align-items: center; gap: 0.7rem; }
+    .tl-logo { width: 28px; height: 28px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .tl-logo img { width: 100%; height: 100%; object-fit: contain; }
+    .tl-logo-ph { font-family: var(--mono); font-size: 0.4rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-soft); line-height: 1.3; text-align: center; }
+    .tl-institution { font-size: 1.05rem; font-weight: 500; line-height: 1.2; }
+    .tl-location {
+      font-family: var(--mono); font-size: 0.6rem;
+      letter-spacing: 0.08em; color: var(--ink-soft);
+      margin-top: 0.25rem;
+    }
+
+    /* Description */
+    .tl-desc { color: var(--ink-mid); font-size: 0.96rem; margin-top: 1rem; line-height: 1.75; }
+    .tl-desc p { margin-bottom: 0.8rem; }
+    .tl-desc p:last-child { margin-bottom: 0; }
+    .tl-desc ul { padding-left: 1.4rem; margin-top: 0.4rem; }
+    .tl-desc ul li { margin-bottom: 0.4rem; }
+    .tl-desc ul li::marker { color: var(--accent); }
+
+    /* Attachment */
+    .tl-attachment {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-family: var(--mono); font-size: 0.62rem;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--ink-soft); text-decoration: none;
+      border: 1px solid var(--rule); padding: 0.35rem 0.8rem;
+      margin-top: 1.2rem; transition: all 0.2s;
+    }
+    .tl-attachment:hover { border-color: var(--accent); color: var(--accent); }
+    .tl-attachment::before { content: '↓'; }
+    .tl-attachments { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.2rem; }
+
+    /* ── STORY BLOCK (photo + text) ── */
+    .story-block {
+      margin-top: 4rem;
+      padding-top: 4rem;
+      border-top: 1px solid var(--rule);
+    }
+    .story-label {
+      font-family: var(--mono); font-size: 0.62rem;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--ink-soft); margin-bottom: 2.5rem;
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .story-label::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+
+    .story { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; margin-bottom: 4rem; }
+    .story:last-child { margin-bottom: 0; }
+    .story.reverse { direction: rtl; }
+    .story.reverse > * { direction: ltr; }
+
+    .story-photo {
+      aspect-ratio: 4/3;
+      background: var(--bg3);
+      border: 1px solid var(--rule);
+      overflow: hidden;
+      position: relative;
+    }
+    .story-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .story-photo-placeholder {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 0.5rem;
+    }
+    .story-photo-placeholder span {
+      font-family: var(--mono); font-size: 0.6rem;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--ink-soft); text-align: center;
+    }
+    .story-photo-placeholder .ph-icon { font-size: 1.5rem; opacity: 0.3; }
+
+    .story-text {}
+    .story-eyebrow {
+      font-family: var(--mono); font-size: 0.62rem;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 0.6rem;
+    }
+    .story-text h3 { font-size: 1.4rem; font-weight: 400; line-height: 1.2; margin-bottom: 1.2rem; }
+    .story-text h3 em { font-style: italic; color: var(--ink-mid); }
+    .story-text p { color: var(--ink-mid); margin-bottom: 1rem; font-size: 0.98rem; line-height: 1.8; }
+    .story-text p:last-of-type { margin-bottom: 0; }
+
+    /* ── FOOTER ── */
+    footer { border-top: 1px solid var(--rule); padding: 1.8rem 2.5rem; display: flex; justify-content: space-between; align-items: center; background: var(--bg2); transition: background 0.3s; margin-top: 0; }
+    .footer-left { font-family: var(--mono); font-size: 0.63rem; letter-spacing: 0.08em; color: var(--ink-soft); }
+    .footer-personal { font-family: var(--mono); font-size: 0.63rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft); text-decoration: none; transition: color 0.2s; }
+    .footer-personal::before { content: '→ '; }
+    .footer-personal:hover { color: var(--accent2); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 960px) {
+      .page-header { padding: calc(var(--nav-h) + 2.5rem) 2.5rem 2.5rem; grid-template-columns: 1fr; }
+      .content-wrap { padding: 0 2.5rem; }
+      .story { grid-template-columns: 1fr; gap: 2rem; }
+      .story.reverse { direction: ltr; }
+    }
+    @media (max-width: 640px) {
+      nav { padding: 0 1.5rem; }
+      .nav-center, .theme-toggle { display: none; }
+      .nav-burger { display: flex; }
+      .page-header { padding: calc(var(--nav-h) + 2rem) 1.5rem 2rem; }
+      .content-wrap { padding: 0 1.5rem; }
+      .tl-entry { grid-template-columns: 24px 1fr; gap: 0 1rem; }
+      .timeline::before { left: 11px; }
+      .tl-card { padding: 1.4rem 1.2rem; }
+      .tl-card-top { flex-direction: column; gap: 0.8rem; }
+      .section-block { padding: 3rem 0; }
+      footer { padding: 1.5rem; flex-direction: column; gap: 0.8rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">YN<span>.</span>research</a>
+  <ul class="nav-center">
+    <li><a href="about.html">About</a></li>
+    <li><a href="experience.html" class="active">Experience</a></li>
+    <li><a href="projects.html">Projects</a></li>
+    <li><a href="publications.html">Publications</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><span class="sep"></span></li>
+    <li><a href="personal/index.html" class="personal">Personal ↗</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="theme-toggle" id="themeToggle">☀ Light</button>
+    <button class="nav-burger" id="burger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="nav-drawer" id="drawer">
+  <a href="about.html">About</a>
+  <a href="experience.html">Experience</a>
+  <a href="projects.html">Projects</a>
+  <a href="publications.html">Publications</a>
+  <a href="contact.html">Contact</a>
+  <a href="personal/index.html" class="personal">Personal ↗</a>
+  <div class="drawer-theme">
+    <button class="drawer-theme-btn" id="drawerThemeBtn">☀ Switch to Light</button>
+  </div>
+</div>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div>
+    <p class="page-eyebrow">Career & Education</p>
+    <h1 class="page-title">Experience &amp; <em>background.</em></h1>
+  </div>
+  <!-- ← update href with your actual CV filename -->
+  <a href="cv.pdf" class="cv-download" download>↓ Download CV</a>
+</div>
+
+<div class="content-wrap">
+
+  <!-- ══════════════════════════════════
+       WORK EXPERIENCE
+  ══════════════════════════════════ -->
+  <div class="section-block">
+    <div class="section-label">Work Experience</div>
+    <div class="timeline">
+
+      <!-- CNRS -->
+      <div class="tl-entry">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-card-top">
+            <div class="tl-card-left">
+              <div class="tl-period">2024 — Present</div>
+              <div class="tl-role">PhD Candidate · Marie Curie Fellow</div>
+              <div class="tl-institution-row">
+                <div class="tl-logo">
+                  <!-- ← save as logos/cnrs.png, then uncomment and delete placeholder -->
+                  <!-- <img src="logos/cnrs.png" alt="CNRS" /> -->
+                  <div class="tl-logo-ph">CNRS</div>
+                </div>
+                <div>
+                  <div class="tl-institution">CNRS · Laboratoire de Mécanique et d'Acoustique (LMA)</div>
+                  <div class="tl-location">Marseille, France</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tl-desc">
+            <p>
+              <!-- ← Describe your PhD research here. What is your thesis about? What methods do you use? -->
+              [Brief description of your PhD project — topic, methods, goals, funding framework.]
+            </p>
+            <ul>
+              <li><!-- ← Key activity or result --></li>
+              <li><!-- ← Key activity or result --></li>
+              <li><!-- ← Key activity or result --></li>
+            </ul>
+          </div>
+          <div class="tl-attachments">
+            <!-- ← Uncomment and update to attach a file, e.g. a project description PDF -->
+            <!-- <a href="files/phd-project-description.pdf" class="tl-attachment" target="_blank">Project description</a> -->
+          </div>
+        </div>
+      </div>
+
+      <!-- DMM -->
+      <div class="tl-entry">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-card-top">
+            <div class="tl-card-left">
+              <div class="tl-period">June 2024 — June 2025</div>
+              <div class="tl-role">Research Associate · Data Scientist</div>
+              <div class="tl-institution-row">
+                <div class="tl-logo">
+                  <!-- ← save as logos/dmm.png -->
+                  <!-- <img src="logos/dmm.png" alt="DMM" /> -->
+                  <div class="tl-logo-ph">DMM</div>
+                </div>
+                <div>
+                  <div class="tl-institution">German Oceanographic Museum (DMM)</div>
+                  <div class="tl-location">Stralsund, Germany</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tl-desc">
+            <p>
+              <!-- ← Describe what you did at DMM -->
+              [Description of your work at DMM — research questions, datasets, outputs.]
+            </p>
+            <ul>
+              <li><!-- ← Key activity or result --></li>
+              <li><!-- ← Key activity or result --></li>
+            </ul>
+          </div>
+          <div class="tl-attachments">
+            <!-- <a href="files/dmm-report.pdf" class="tl-attachment" target="_blank">Project report</a> -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Centile Patagonia -->
+      <div class="tl-entry">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-card-top">
+            <div class="tl-card-left">
+              <div class="tl-period">Sept 2023 — Present</div>
+              <div class="tl-role">Volunteer Data Scientist</div>
+              <div class="tl-institution-row">
+                <div class="tl-logo">
+                  <!-- ← save as logos/centile.png -->
+                  <!-- <img src="logos/centile.png" alt="Centile Patagonia" /> -->
+                  <div class="tl-logo-ph">Centile</div>
+                </div>
+                <div>
+                  <div class="tl-institution">Centile Patagonia</div>
+                  <div class="tl-location">NGO — Remote</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tl-desc">
+            <p>
+              <!-- ← Describe your volunteer work -->
+              [Description of your contributions to Centile Patagonia — what the NGO does, your role, tools used.]
+            </p>
+            <ul>
+              <li><!-- ← Key activity or result --></li>
+              <li><!-- ← Key activity or result --></li>
+            </ul>
+          </div>
+          <div class="tl-attachments">
+            <!-- <a href="files/centile-report.pdf" class="tl-attachment" target="_blank">Report</a> -->
+          </div>
+        </div>
+      </div>
+
+      <!-- WHOI -->
+      <div class="tl-entry">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-card-top">
+            <div class="tl-card-left">
+              <div class="tl-period">Oct 2022 — Sept 2023</div>
+              <div class="tl-role">Guest Student</div>
+              <div class="tl-institution-row">
+                <div class="tl-logo">
+                  <!-- ← save as logos/whoi.png -->
+                  <!-- <img src="logos/whoi.png" alt="WHOI" /> -->
+                  <div class="tl-logo-ph">WHOI</div>
+                </div>
+                <div>
+                  <div class="tl-institution">Woods Hole Oceanographic Institution (WHOI)</div>
+                  <div class="tl-location">Woods Hole, MA, USA</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tl-desc">
+            <p>
+              <!-- ← Describe your time at WHOI -->
+              [Description of your guest student period — which lab, supervisors, research topic, main outputs.]
+            </p>
+            <ul>
+              <li><!-- ← Key activity or result --></li>
+              <li><!-- ← Key activity or result --></li>
+            </ul>
+          </div>
+          <div class="tl-attachments">
+            <!-- <a href="files/whoi-poster.pdf" class="tl-attachment" target="_blank">Conference poster</a> -->
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end timeline -->
+
+    <!-- ── STORY BLOCKS ── -->
+    <div class="story-block">
+      <div class="story-label">In their own words</div>
+
+      <!-- Story: DMM — most recent first -->
+      <div class="story">
+        <div class="story-photo">
+          <!-- ← save photo as photos/dmm.jpg -->
+          <!-- <img src="photos/dmm.jpg" alt="DMM Stralsund" /> -->
+          <div class="story-photo-placeholder">
+            <span class="ph-icon">⬜</span>
+            <span>Add a photo<br/>photos/dmm.jpg</span>
+          </div>
+        </div>
+        <div class="story-text">
+          <p class="story-eyebrow">June 2024 — June 2025 · Stralsund, Germany</p>
+          <h3>Ocean data on the <em>Baltic coast.</em></h3>
+          <!-- ← Write a short personal account of your DMM experience -->
+          <p>[Write a few sentences about your time at DMM — the city, the museum, the research context, what made it unique.]</p>
+          <p>[Optional second paragraph.]</p>
+        </div>
+      </div>
+
+      <!-- Story: Centile Patagonia -->
+      <div class="story reverse">
+        <div class="story-photo">
+          <!-- ← save photo as photos/centile.jpg -->
+          <!-- <img src="photos/centile.jpg" alt="Centile Patagonia" /> -->
+          <div class="story-photo-placeholder">
+            <span class="ph-icon">⬜</span>
+            <span>Add a photo<br/>photos/centile.jpg</span>
+          </div>
+        </div>
+        <div class="story-text">
+          <p class="story-eyebrow">Sept 2023 — Present · Remote</p>
+          <h3>Data science for <em>conservation.</em></h3>
+          <!-- ← Write a short account of your Centile Patagonia volunteer work -->
+          <p>[Write a few sentences about why you joined, what the NGO does, and what your role involves.]</p>
+          <p>[Optional second paragraph.]</p>
+        </div>
+      </div>
+
+      <!-- Story: WHOI -->
+      <div class="story">
+        <div class="story-photo">
+          <!-- ← save photo as photos/whoi.jpg -->
+          <!-- <img src="photos/whoi.jpg" alt="Woods Hole" /> -->
+          <div class="story-photo-placeholder">
+            <span class="ph-icon">⬜</span>
+            <span>Add a photo<br/>photos/whoi.jpg</span>
+          </div>
+        </div>
+        <div class="story-text">
+          <p class="story-eyebrow">Oct 2022 — Sept 2023 · Woods Hole, MA</p>
+          <h3>A year at the edge of <em>the Atlantic.</em></h3>
+          <!-- ← Write a short personal account of your WHOI experience (3–5 sentences) -->
+          <p>[Write a few sentences about what it was like to be at WHOI — the environment, the people, what you learned, a memorable moment or project.]</p>
+          <p>[A second paragraph if you want — what this experience meant for your career or research direction.]</p>
+        </div>
+      </div>
+
+    </div><!-- end story-block -->
+  </div><!-- end section-block work -->
+
+  <!-- ══════════════════════════════════
+       EDUCATION
+  ══════════════════════════════════ -->
+  <div class="section-block">
+    <div class="section-label">Education</div>
+    <div class="timeline">
+
+      <!-- PhD -->
+      <div class="tl-entry">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-card-top">
+            <div class="tl-card-left">
+              <div class="tl-period">2024 — Present</div>
+              <div class="tl-role">PhD in Underwater Acoustics &amp; Seismology</div>
+              <div class="tl-institution-row">
+                <div class="tl-logo">
+                  <!-- <img src="logos/cnrs.png" alt="CNRS" /> -->
+                  <div class="tl-logo-ph">CNRS</div>
+                </div>
+                <div>
+                  <div class="tl-institution">CNRS · LMA, Aix-Marseille Université</div>
+                  <div class="tl-location">Marseille, France</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tl-desc">
+            <p>
+              <!-- ← Thesis title and supervisors if you want to include them -->
+              Thesis: <em>"[Your thesis title here]"</em><br/>
+              Supervisors: [Name(s)] · Funded by the Marie Skłodowska-Curie Actions Doctoral Network.
+            </p>
+          </div>
+          <div class="tl-attachments">
+            <!-- <a href="files/phd-summary.pdf" class="tl-attachment" target="_blank">Research summary</a> -->
+          </div>
+        </div>
+      </div>
+
+      <!-- MSc -->
+      <div class="tl-entry">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-card-top">
+            <div class="tl-card-left">
+              <div class="tl-period">2021 — 2024</div>
+              <div class="tl-role">MSc · Data Science</div>
+              <div class="tl-institution-row">
+                <div class="tl-logo">
+                  <!-- ← save as logos/unibo.png -->
+                  <!-- <img src="logos/unibo.png" alt="University of Bologna" /> -->
+                  <div class="tl-logo-ph">UniBo</div>
+                </div>
+                <div>
+                  <div class="tl-institution">University of Bologna</div>
+                  <div class="tl-location">Bologna, Italy</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tl-desc">
+            <p>
+              <!-- ← Thesis title, grade, relevant courses -->
+              Thesis: <em>"[Your MSc thesis title]"</em><br/>
+              <!-- Grade: [X/110 con lode] -->
+              <!-- ← Add any relevant courses or focus areas if you want -->
+            </p>
+          </div>
+          <div class="tl-attachments">
+            <!-- <a href="files/msc-thesis.pdf" class="tl-attachment" target="_blank">Thesis (PDF)</a> -->
+          </div>
+        </div>
+      </div>
+
+      <!-- BSc -->
+      <div class="tl-entry">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-card-top">
+            <div class="tl-card-left">
+              <div class="tl-period">2018 — 2021</div>
+              <div class="tl-role">BSc · Statistical Sciences</div>
+              <div class="tl-institution-row">
+                <div class="tl-logo">
+                  <!-- <img src="logos/unibo.png" alt="University of Bologna" /> -->
+                  <div class="tl-logo-ph">UniBo</div>
+                </div>
+                <div>
+                  <div class="tl-institution">University of Bologna</div>
+                  <div class="tl-location">Bologna, Italy</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tl-desc">
+            <p>
+              Thesis: <em>"[Your BSc thesis title]"</em><br/>
+              <!-- Grade: [X/110] -->
+            </p>
+          </div>
+          <div class="tl-attachments">
+            <!-- <a href="files/bsc-thesis.pdf" class="tl-attachment" target="_blank">Thesis (PDF)</a> -->
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end education timeline -->
+  </div><!-- end section-block education -->
+
+</div><!-- end content-wrap -->
+
+<footer>
+  <div class="footer-left">© <span id="year"></span> Your Name · yourname.github.io</div>
+  <a href="personal/index.html" class="footer-personal">Personal site</a>
+</footer>
+
+<script>
+  const SITE_KEY = 'pro-theme';
+  const DEFAULT  = 'dark';
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    const isDark = theme === 'dark';
+    document.getElementById('themeToggle').textContent = isDark ? '☀ Light' : '☾ Dark';
+    document.getElementById('drawerThemeBtn').textContent = isDark ? '☀ Switch to Light' : '☾ Switch to Dark';
+    try { localStorage.setItem(SITE_KEY, theme); } catch(e) {}
+  }
+  function toggleTheme() {
+    applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  }
+  (function() {
+    let saved;
+    try { saved = localStorage.getItem(SITE_KEY); } catch(e) {}
+    applyTheme(saved || DEFAULT);
+  })();
+  document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+  document.getElementById('drawerThemeBtn').addEventListener('click', toggleTheme);
+  document.getElementById('year').textContent = new Date().getFullYear();
+  const burger = document.getElementById('burger');
+  const drawer = document.getElementById('drawer');
+  burger.addEventListener('click', () => {
+    const open = drawer.classList.toggle('open');
+    burger.classList.toggle('open', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+  drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    drawer.classList.remove('open');
+    burger.classList.remove('open');
+    document.body.style.overflow = '';
+  }));
+</script>
+</body>
+</html>
