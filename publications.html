@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Publications — Your Name</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root, [data-theme="dark"] {
+      --bg:       #0f0f0e;
+      --bg2:      #181816;
+      --bg3:      #1f1f1c;
+      --ink:      #e8e6e0;
+      --ink-mid:  #9a9890;
+      --ink-soft: #5a5850;
+      --accent:   #4a90d9;
+      --accent2:  #e05c4a;
+      --rule:     #2a2a26;
+      --serif: 'EB Garamond', Georgia, serif;
+      --mono:  'DM Mono', monospace;
+      --nav-h: 56px;
+    }
+    [data-theme="light"] {
+      --bg:       #f7f6f2;
+      --bg2:      #eeede8;
+      --bg3:      #e6e4de;
+      --ink:      #1a1a18;
+      --ink-mid:  #4a4a44;
+      --ink-soft: #8a8a82;
+      --accent:   #2d5a8e;
+      --accent2:  #c0392b;
+      --rule:     #d4d3cc;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--ink); font-family: var(--serif); font-size: 18px; line-height: 1.7; transition: background 0.3s, color 0.3s; }
+
+    /* ── NAV ── */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; background: var(--bg); border-bottom: 1px solid var(--rule); height: var(--nav-h); display: flex; align-items: center; padding: 0 2.5rem; justify-content: space-between; transition: background 0.3s, border-color 0.3s; }
+    .nav-logo { font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.08em; color: var(--ink-mid); text-decoration: none; flex-shrink: 0; }
+    .nav-logo span { color: var(--accent); }
+    .nav-center { display: flex; gap: 1.8rem; list-style: none; align-items: center; }
+    .nav-center a { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-mid); text-decoration: none; transition: color 0.2s; white-space: nowrap; }
+    .nav-center a:hover, .nav-center a.active { color: var(--accent); }
+    .nav-center .sep { width: 1px; height: 16px; background: var(--rule); flex-shrink: 0; }
+    .nav-center a.personal { color: var(--ink-soft); }
+    .nav-center a.personal:hover { color: var(--accent2); }
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+    .theme-toggle { background: none; border: 1px solid var(--rule); color: var(--ink-soft); cursor: pointer; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.35rem 0.7rem; transition: border-color 0.2s, color 0.2s; white-space: nowrap; }
+    .theme-toggle:hover { border-color: var(--ink-soft); color: var(--ink); }
+    .nav-burger { display: none; flex-direction: column; justify-content: center; gap: 5px; width: 32px; height: 32px; background: none; border: none; cursor: pointer; padding: 4px; }
+    .nav-burger span { display: block; width: 100%; height: 1px; background: var(--ink-mid); transition: transform 0.25s ease, opacity 0.25s ease; transform-origin: center; }
+    .nav-burger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .nav-burger.open span:nth-child(2) { opacity: 0; }
+    .nav-burger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+    .nav-drawer { display: none; position: fixed; top: var(--nav-h); left: 0; right: 0; background: var(--bg); border-bottom: 1px solid var(--rule); z-index: 190; flex-direction: column; padding: 1.5rem 2rem 2rem; transition: background 0.3s; }
+    .nav-drawer.open { display: flex; }
+    .nav-drawer a { font-family: var(--mono); font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-mid); text-decoration: none; padding: 0.9rem 0; border-bottom: 1px solid var(--rule); transition: color 0.2s; }
+    .nav-drawer a:last-of-type { border-bottom: none; }
+    .nav-drawer a:hover { color: var(--accent); }
+    .nav-drawer a.personal { color: var(--ink-soft); }
+    .nav-drawer .drawer-theme { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--rule); }
+    .drawer-theme-btn { background: none; border: 1px solid var(--rule); color: var(--ink-soft); cursor: pointer; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.6rem 1rem; width: 100%; text-align: left; }
+
+    /* ── PAGE HEADER ── */
+    .page-header { padding: calc(var(--nav-h) + 4rem) 4rem 3rem; border-bottom: 1px solid var(--rule); max-width: 1100px; margin: 0 auto; }
+    .page-eyebrow { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.8rem; }
+    .page-title { font-size: clamp(2.2rem, 4vw, 3.4rem); font-weight: 400; line-height: 1.1; margin-bottom: 1rem; }
+    .page-title em { font-style: italic; color: var(--ink-mid); }
+    .page-desc { font-size: 1rem; color: var(--ink-mid); max-width: 56ch; }
+
+    /* ── LAYOUT ── */
+    .content-wrap { max-width: 1100px; margin: 0 auto; padding: 0 4rem 6rem; }
+
+    /* ── SECTION ── */
+    .section-block { padding: 4rem 0; border-bottom: 1px solid var(--rule); }
+    .section-block:last-child { border-bottom: none; }
+    .section-label { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 2.5rem; display: flex; align-items: center; gap: 1rem; }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+
+    /* ── FILTER BAR ── */
+    .filter-bar { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+    .filter-label { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-soft); margin-right: 0.4rem; flex-shrink: 0; }
+    .filter-btn { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.35rem 0.85rem; border: 1px solid var(--rule); background: none; color: var(--ink-soft); cursor: pointer; transition: all 0.18s; }
+    .filter-btn:hover { border-color: var(--ink-mid); color: var(--ink); }
+    .filter-btn.active { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+
+    /* ── PUBLICATION ITEM ── */
+    /*
+      HOW TO ADD A NEW PUBLICATION:
+      Copy one .pub-item block, paste it above the others (most recent first),
+      and update: year, type, title, authors, journal/venue, doi link.
+      For the type badge use one of: "peer-reviewed", "conference-paper", "preprint"
+    */
+    .pub-list { display: flex; flex-direction: column; }
+    .pub-item {
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: 0 2.5rem;
+      padding: 2rem 0;
+      border-bottom: 1px solid var(--rule);
+      transition: opacity 0.2s;
+    }
+    .pub-item:last-child { border-bottom: none; }
+    .pub-item.hidden { display: none; }
+
+    .pub-left { display: flex; flex-direction: column; align-items: flex-start; gap: 0.5rem; padding-top: 0.3rem; }
+    .pub-year { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.08em; color: var(--ink-soft); }
+    .pub-type-badge {
+      font-family: var(--mono); font-size: 0.52rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.2rem 0.5rem; border: 1px solid var(--rule);
+      color: var(--ink-soft); line-height: 1.4; text-align: center;
+    }
+    .pub-type-badge.conference-paper { border-color: var(--ink-soft); color: var(--ink-soft); }
+    .pub-type-badge.preprint { border-color: var(--accent2); color: var(--accent2); }
+
+    .pub-right {}
+    .pub-title { font-size: 1.05rem; font-weight: 500; line-height: 1.35; margin-bottom: 0.35rem; }
+    .pub-authors { font-size: 0.88rem; color: var(--ink-mid); margin-bottom: 0.3rem; font-style: italic; }
+    .pub-authors strong { font-style: normal; color: var(--ink); font-weight: 500; }
+    .pub-venue { font-size: 0.88rem; color: var(--ink-soft); margin-bottom: 0.8rem; }
+    .pub-links { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .pub-link {
+      font-family: var(--mono); font-size: 0.6rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--ink-soft); text-decoration: none;
+      border: 1px solid var(--rule); padding: 0.25rem 0.65rem;
+      transition: all 0.2s;
+    }
+    .pub-link:hover { border-color: var(--accent); color: var(--accent); }
+    .pub-link.doi { border-color: var(--accent); color: var(--accent); }
+    .pub-link.doi:hover { background: var(--accent); color: var(--bg); }
+
+    /* ── POSTER ITEM ── */
+    /*
+      HOW TO ADD A NEW POSTER:
+      Copy one .poster-item block, update the fields, save the PDF as
+      files/posters/your-poster-name.pdf and update the href.
+    */
+    .poster-list { display: flex; flex-direction: column; }
+    .poster-item {
+      display: grid;
+      grid-template-columns: 72px 1fr auto;
+      gap: 0 2.5rem;
+      padding: 2rem 0;
+      border-bottom: 1px solid var(--rule);
+      align-items: start;
+    }
+    .poster-item:last-child { border-bottom: none; }
+    .poster-left { display: flex; flex-direction: column; gap: 0.5rem; padding-top: 0.3rem; }
+    .poster-year { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.08em; color: var(--ink-soft); }
+    .poster-mid {}
+    .poster-conference {
+      font-family: var(--mono); font-size: 0.62rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 0.3rem;
+    }
+    .poster-title { font-size: 1.05rem; font-weight: 500; line-height: 1.35; margin-bottom: 0.3rem; }
+    .poster-authors { font-size: 0.88rem; color: var(--ink-mid); font-style: italic; margin-bottom: 0.25rem; }
+    .poster-authors strong { font-style: normal; color: var(--ink); font-weight: 500; }
+    .poster-venue { font-size: 0.88rem; color: var(--ink-soft); }
+    .poster-right { padding-top: 0.3rem; }
+
+    /* PDF preview button */
+    .poster-pdf-btn {
+      font-family: var(--mono); font-size: 0.6rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--ink-soft); background: none;
+      border: 1px solid var(--rule); padding: 0.4rem 0.8rem;
+      cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; gap: 0.4rem;
+      white-space: nowrap;
+    }
+    .poster-pdf-btn::before { content: '⊞'; font-size: 0.8rem; }
+    .poster-pdf-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── PDF MODAL ── */
+    .pdf-modal {
+      display: none; position: fixed; inset: 0;
+      z-index: 500; background: rgba(0,0,0,0.85);
+      align-items: center; justify-content: center;
+      padding: 2rem;
+    }
+    .pdf-modal.open { display: flex; }
+    .pdf-modal-inner {
+      background: var(--bg2); border: 1px solid var(--rule);
+      width: 100%; max-width: 860px;
+      max-height: 90vh; display: flex; flex-direction: column;
+    }
+    .pdf-modal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.5rem; border-bottom: 1px solid var(--rule); flex-shrink: 0;
+    }
+    .pdf-modal-title { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-mid); }
+    .pdf-modal-actions { display: flex; gap: 0.5rem; align-items: center; }
+    .pdf-modal-download {
+      font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--ink-soft); text-decoration: none; border: 1px solid var(--rule);
+      padding: 0.3rem 0.7rem; transition: all 0.2s;
+    }
+    .pdf-modal-download:hover { border-color: var(--accent); color: var(--accent); }
+    .pdf-modal-close {
+      background: none; border: 1px solid var(--rule); color: var(--ink-soft);
+      font-family: var(--mono); font-size: 0.7rem; padding: 0.3rem 0.7rem;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .pdf-modal-close:hover { border-color: var(--accent2); color: var(--accent2); }
+    .pdf-modal-body { flex: 1; overflow: hidden; min-height: 0; }
+    .pdf-modal-body iframe { width: 100%; height: 100%; border: none; display: block; }
+
+    /* ── FOOTER ── */
+    footer { border-top: 1px solid var(--rule); padding: 1.8rem 2.5rem; display: flex; justify-content: space-between; align-items: center; background: var(--bg2); transition: background 0.3s; }
+    .footer-left { font-family: var(--mono); font-size: 0.63rem; letter-spacing: 0.08em; color: var(--ink-soft); }
+    .footer-personal { font-family: var(--mono); font-size: 0.63rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft); text-decoration: none; transition: color 0.2s; }
+    .footer-personal::before { content: '→ '; }
+    .footer-personal:hover { color: var(--accent2); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 960px) {
+      .page-header { padding: calc(var(--nav-h) + 2.5rem) 2.5rem 2.5rem; }
+      .content-wrap { padding: 0 2.5rem 5rem; }
+      .poster-item { grid-template-columns: 72px 1fr; }
+      .poster-right { grid-column: 2; padding-top: 0.8rem; }
+    }
+    @media (max-width: 640px) {
+      nav { padding: 0 1.5rem; }
+      .nav-center, .theme-toggle { display: none; }
+      .nav-burger { display: flex; }
+      .page-header { padding: calc(var(--nav-h) + 2rem) 1.5rem 2rem; }
+      .content-wrap { padding: 0 1.5rem 4rem; }
+      .pub-item { grid-template-columns: 1fr; gap: 0.5rem; }
+      .pub-left { flex-direction: row; align-items: center; gap: 0.8rem; }
+      .poster-item { grid-template-columns: 1fr; gap: 0.5rem; }
+      .poster-left { flex-direction: row; align-items: center; }
+      .poster-right { padding-top: 0; }
+      .pdf-modal { padding: 1rem; }
+      footer { padding: 1.5rem; flex-direction: column; gap: 0.8rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">YN<span>.</span>research</a>
+  <ul class="nav-center">
+    <li><a href="about.html">About</a></li>
+    <li><a href="experience.html">Experience</a></li>
+    <li><a href="projects/index.html">Projects</a></li>
+    <li><a href="publications.html" class="active">Publications</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><span class="sep"></span></li>
+    <li><a href="personal/index.html" class="personal">Personal ↗</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="theme-toggle" id="themeToggle">☀ Light</button>
+    <button class="nav-burger" id="burger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="nav-drawer" id="drawer">
+  <a href="about.html">About</a>
+  <a href="experience.html">Experience</a>
+  <a href="projects/index.html">Projects</a>
+  <a href="publications.html">Publications</a>
+  <a href="contact.html">Contact</a>
+  <a href="personal/index.html" class="personal">Personal ↗</a>
+  <div class="drawer-theme">
+    <button class="drawer-theme-btn" id="drawerThemeBtn">☀ Switch to Light</button>
+  </div>
+</div>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <p class="page-eyebrow">Research output</p>
+  <h1 class="page-title">Publications &amp; <em>posters.</em></h1>
+  <p class="page-desc">Conference papers and poster presentations. For a full list see my <a href="https://orcid.org/0009-0008-9741-6403" target="_blank" style="color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent);">ORCID</a> or <a href="https://scholar.google.com/citations?user=lQKvJU8AAAAJ&hl=it&oi=ao" target="_blank" style="color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent);">Google Scholar</a> profiles.</p>
+</div>
+
+<div class="content-wrap">
+
+  <!-- ══════════════════════
+       PUBLICATIONS
+  ══════════════════════ -->
+  <div class="section-block">
+    <div class="section-label">Publications</div>
+
+    <!-- Filter -->
+    <div class="filter-bar">
+      <span class="filter-label">Type</span>
+      <button class="filter-btn active" data-type="all">All</button>
+      <button class="filter-btn" data-type="conference-paper">Conference Papers</button>
+      <button class="filter-btn" data-type="preprint">Preprints</button>
+    </div>
+
+    <div class="pub-list" id="pubList">
+
+      <!--
+        ══════════════════════════════════════════════
+        HOW TO ADD A NEW PUBLICATION
+        ══════════════════════════════════════════════
+        1. Copy the .pub-item block below
+        2. Paste it ABOVE the existing ones (most recent first)
+        3. Update:
+           - data-type: "conference-paper" | "preprint"
+           - .pub-year
+           - .pub-type-badge class and text
+           - .pub-title
+           - .pub-authors  (wrap YOUR name in <strong></strong>)
+           - .pub-venue
+           - href in .pub-link.doi  (replace # with actual DOI URL)
+           - add/remove extra .pub-link buttons as needed
+        ══════════════════════════════════════════════
+      -->
+
+      <div class="pub-item" data-type="conference-paper">
+        <div class="pub-left">
+          <div class="pub-year"><!-- ← YEAR e.g. 2024 --></div>
+          <div class="pub-type-badge conference-paper">Conference Paper</div>
+        </div>
+        <div class="pub-right">
+          <div class="pub-title"><!-- ← Full paper title --></div>
+          <div class="pub-authors">
+            <!-- ← Author list. Wrap your name in <strong>Your Name</strong> -->
+          </div>
+          <div class="pub-venue">
+            <!-- ← Journal name, volume(issue), pages. e.g.:
+                 Journal of the Acoustical Society of America, 155(3), 1234–1245 -->
+          </div>
+          <div class="pub-links">
+            <a href="#" class="pub-link doi" target="_blank">DOI ↗</a>
+            <!-- Optional extra links: -->
+            <!-- <a href="#" class="pub-link" target="_blank">PDF ↗</a> -->
+            <!-- <a href="#" class="pub-link" target="_blank">Code ↗</a> -->
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end pub-list -->
+  </div><!-- end section publications -->
+
+  <!-- ══════════════════════
+       POSTERS
+  ══════════════════════ -->
+  <div class="section-block">
+    <div class="section-label">Conference Posters</div>
+
+    <div class="poster-list">
+
+      <!--
+        ══════════════════════════════════════════════
+        HOW TO ADD A NEW POSTER
+        ══════════════════════════════════════════════
+        1. Copy a .poster-item block
+        2. Paste it ABOVE existing ones (most recent first)
+        3. Update all fields
+        4. Save the PDF as files/posters/your-filename.pdf
+        5. Update data-pdf and the download href accordingly
+        ══════════════════════════════════════════════
+      -->
+
+      <!-- POSTER 1 — most recent first, update as needed -->
+      <div class="poster-item">
+        <div class="poster-left">
+          <div class="poster-year">2024</div>
+        </div>
+        <div class="poster-mid">
+          <div class="poster-conference">ASA 2024</div>
+          <div class="poster-title">Passive Acoustic Detection of Low-Frequency Seismic Signals in the Mediterranean Sea</div>
+          <div class="poster-authors"><strong>Your Name</strong>, Collaborator A, Collaborator B</div>
+          <div class="poster-venue">188th Meeting of the Acoustical Society of America · Ottawa, Canada · May 2024</div>
+        </div>
+        <div class="poster-right">
+          <!-- ← Update data-pdf with the path to your PDF file
+               Save file as: files/posters/poster-1.pdf -->
+          <button class="poster-pdf-btn"
+                  data-pdf="files/posters/poster-1.pdf"
+                  data-title="Poster — [Conference name]"
+                  data-download="files/posters/poster-1.pdf">
+            View poster
+          </button>
+        </div>
+      </div>
+
+      <!-- POSTER 2 -->
+      <div class="poster-item">
+        <div class="poster-left">
+          <div class="poster-year">2023</div>
+        </div>
+        <div class="poster-mid">
+          <div class="poster-conference">OCEANS 2023</div>
+          <div class="poster-title">T-Wave Characterisation Using Spectral Methods: A Case Study in the North Atlantic</div>
+          <div class="poster-authors"><strong>Your Name</strong>, Collaborator C</div>
+          <div class="poster-venue">OCEANS 2023 MTS/IEEE · Limerick, Ireland · Jun 2023</div>
+        </div>
+        <div class="poster-right">
+          <!-- ← Update paths -->
+          <button class="poster-pdf-btn"
+                  data-pdf="files/posters/poster-2.pdf"
+                  data-title="Poster — [Conference name]"
+                  data-download="files/posters/poster-2.pdf">
+            View poster
+          </button>
+        </div>
+      </div>
+
+    </div><!-- end poster-list -->
+  </div><!-- end section posters -->
+
+</div><!-- end content-wrap -->
+
+<!-- PDF MODAL -->
+<div class="pdf-modal" id="pdfModal">
+  <div class="pdf-modal-inner">
+    <div class="pdf-modal-header">
+      <span class="pdf-modal-title" id="pdfModalTitle">Poster</span>
+      <div class="pdf-modal-actions">
+        <a href="#" class="pdf-modal-download" id="pdfModalDownload" download>↓ Download</a>
+        <button class="pdf-modal-close" id="pdfModalClose">✕ Close</button>
+      </div>
+    </div>
+    <div class="pdf-modal-body">
+      <iframe id="pdfModalFrame" src="" title="Poster PDF"></iframe>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-left">© <span id="year"></span> Your Name · yourname.github.io</div>
+  <a href="personal/index.html" class="footer-personal">Personal site</a>
+</footer>
+
+<script>
+  // ── Theme ──
+  const SITE_KEY = 'pro-theme';
+  const DEFAULT  = 'dark';
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    const isDark = theme === 'dark';
+    document.getElementById('themeToggle').textContent = isDark ? '☀ Light' : '☾ Dark';
+    document.getElementById('drawerThemeBtn').textContent = isDark ? '☀ Switch to Light' : '☾ Switch to Dark';
+    try { localStorage.setItem(SITE_KEY, theme); } catch(e) {}
+  }
+  function toggleTheme() {
+    applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  }
+  (function() {
+    let saved; try { saved = localStorage.getItem(SITE_KEY); } catch(e) {}
+    applyTheme(saved || DEFAULT);
+  })();
+  document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+  document.getElementById('drawerThemeBtn').addEventListener('click', toggleTheme);
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // ── Hamburger ──
+  const burger = document.getElementById('burger');
+  const drawer = document.getElementById('drawer');
+  burger.addEventListener('click', () => {
+    const open = drawer.classList.toggle('open');
+    burger.classList.toggle('open', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+  drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    drawer.classList.remove('open');
+    burger.classList.remove('open');
+    document.body.style.overflow = '';
+  }));
+
+  // ── Publication filter ──
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const type = btn.dataset.type;
+      document.querySelectorAll('.pub-item').forEach(item => {
+        item.classList.toggle('hidden', type !== 'all' && item.dataset.type !== type);
+      });
+    });
+  });
+
+  // ── PDF Modal ──
+  const modal      = document.getElementById('pdfModal');
+  const modalFrame = document.getElementById('pdfModalFrame');
+  const modalTitle = document.getElementById('pdfModalTitle');
+  const modalDl    = document.getElementById('pdfModalDownload');
+  const modalClose = document.getElementById('pdfModalClose');
+
+  document.querySelectorAll('.poster-pdf-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      modalFrame.src = btn.dataset.pdf;
+      modalTitle.textContent = btn.dataset.title;
+      modalDl.href = btn.dataset.download;
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+
+  function closeModal() {
+    modal.classList.remove('open');
+    modalFrame.src = '';
+    document.body.style.overflow = '';
+  }
+  modalClose.addEventListener('click', closeModal);
+  modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
+</body>
+</html>
