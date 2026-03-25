@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact — Your Name</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root, [data-theme="light"] {
+      --bg: #f5f3ee; --bg2: #ede9e0; --bg3: #e4e0d6;
+      --ink: #1c1a16; --ink-mid: #52503e; --ink-soft: #908e7a;
+      --accent: #6b5c3e; --accent2: #3d6b4f; --rule: #d8d4c8;
+      --serif: 'EB Garamond', Georgia, serif; --mono: 'DM Mono', monospace; --nav-h: 56px;
+    }
+    [data-theme="dark"] {
+      --bg: #0f0e0c; --bg2: #171612; --bg3: #1e1d18;
+      --ink: #e8e4da; --ink-mid: #96917f; --ink-soft: #55513f;
+      --accent: #b89a6a; --accent2: #5a9e74; --rule: #2a2820;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--ink); font-family: var(--serif); font-size: 18px; line-height: 1.7; transition: background 0.3s, color 0.3s; }
+
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; background: var(--bg); border-bottom: 1px solid var(--rule); height: var(--nav-h); display: flex; align-items: center; padding: 0 2.5rem; justify-content: space-between; transition: background 0.3s, border-color 0.3s; }
+    .nav-logo { font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.08em; color: var(--ink-mid); text-decoration: none; flex-shrink: 0; }
+    .nav-logo span { color: var(--accent); }
+    .nav-center { display: flex; gap: 1.8rem; list-style: none; align-items: center; }
+    .nav-center a { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-mid); text-decoration: none; transition: color 0.2s; white-space: nowrap; }
+    .nav-center a:hover, .nav-center a.active { color: var(--accent); }
+    .nav-center .sep { width: 1px; height: 16px; background: var(--rule); flex-shrink: 0; }
+    .nav-center a.pro { color: var(--ink-soft); }
+    .nav-center a.pro:hover { color: var(--accent2); }
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+    .theme-toggle { background: none; border: 1px solid var(--rule); color: var(--ink-soft); cursor: pointer; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.35rem 0.7rem; transition: border-color 0.2s, color 0.2s; white-space: nowrap; }
+    .theme-toggle:hover { border-color: var(--ink-soft); color: var(--ink); }
+    .nav-burger { display: none; flex-direction: column; justify-content: center; gap: 5px; width: 32px; height: 32px; background: none; border: none; cursor: pointer; padding: 4px; }
+    .nav-burger span { display: block; width: 100%; height: 1px; background: var(--ink-mid); transition: transform 0.25s ease, opacity 0.25s ease; transform-origin: center; }
+    .nav-burger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .nav-burger.open span:nth-child(2) { opacity: 0; }
+    .nav-burger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+    .nav-drawer { display: none; position: fixed; top: var(--nav-h); left: 0; right: 0; background: var(--bg); border-bottom: 1px solid var(--rule); z-index: 190; flex-direction: column; padding: 1.5rem 2rem 2rem; transition: background 0.3s; }
+    .nav-drawer.open { display: flex; }
+    .nav-drawer a { font-family: var(--mono); font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-mid); text-decoration: none; padding: 0.9rem 0; border-bottom: 1px solid var(--rule); transition: color 0.2s; }
+    .nav-drawer a:last-of-type { border-bottom: none; }
+    .nav-drawer a:hover { color: var(--accent); }
+    .nav-drawer a.pro { color: var(--ink-soft); }
+    .nav-drawer .drawer-theme { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--rule); }
+    .drawer-theme-btn { background: none; border: 1px solid var(--rule); color: var(--ink-soft); cursor: pointer; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.6rem 1rem; width: 100%; text-align: left; }
+
+    .page-wrap { max-width: 1100px; margin: 0 auto; padding: calc(var(--nav-h) + 5rem) 4rem 6rem; display: grid; grid-template-columns: 1.1fr 1fr; gap: 6rem; align-items: start; }
+    .page-eyebrow { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
+    .page-title { font-size: clamp(2.2rem, 4vw, 3.4rem); font-weight: 400; line-height: 1.1; margin-bottom: 2rem; }
+    .page-title em { font-style: italic; color: var(--ink-mid); }
+    .intro-text p { color: var(--ink-mid); font-size: 1.05rem; line-height: 1.8; margin-bottom: 1.1rem; }
+    .intro-text p:last-child { margin-bottom: 0; }
+
+    .contact-links { display: flex; flex-direction: column; gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+    .contact-item { display: grid; grid-template-columns: 90px 1fr auto; align-items: center; gap: 1.5rem; padding: 1.3rem 1.6rem; background: var(--bg); text-decoration: none; color: inherit; transition: background 0.2s; }
+    .contact-item:hover { background: var(--bg2); }
+    .contact-item:hover .contact-item-arrow { color: var(--accent); transform: translateX(3px); }
+    .contact-item-label { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft); }
+    .contact-item-value { font-size: 0.95rem; color: var(--ink-mid); word-break: break-all; }
+    .contact-item:hover .contact-item-value { color: var(--ink); }
+    .contact-item-arrow { font-family: var(--mono); font-size: 0.8rem; color: var(--ink-soft); transition: color 0.2s, transform 0.2s; flex-shrink: 0; }
+
+    footer { border-top: 1px solid var(--rule); padding: 1.8rem 2.5rem; display: flex; justify-content: space-between; align-items: center; background: var(--bg2); transition: background 0.3s; }
+    .footer-left { font-family: var(--mono); font-size: 0.63rem; letter-spacing: 0.08em; color: var(--ink-soft); }
+    .footer-pro { font-family: var(--mono); font-size: 0.63rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft); text-decoration: none; transition: color 0.2s; }
+    .footer-pro::before { content: '→ '; }
+    .footer-pro:hover { color: var(--accent); }
+
+    @media (max-width: 960px) {
+      .page-wrap { grid-template-columns: 1fr; gap: 3.5rem; padding: calc(var(--nav-h) + 3rem) 2.5rem 5rem; }
+    }
+    @media (max-width: 640px) {
+      nav { padding: 0 1.5rem; }
+      .nav-center, .theme-toggle { display: none; }
+      .nav-burger { display: flex; }
+      .page-wrap { padding: calc(var(--nav-h) + 2rem) 1.5rem 4rem; }
+      .contact-item { grid-template-columns: 70px 1fr auto; gap: 1rem; padding: 1.1rem 1.2rem; }
+      .contact-item-value { font-size: 0.82rem; }
+      footer { padding: 1.5rem; flex-direction: column; gap: 0.8rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">YN<span>.</span>personal</a>
+  <ul class="nav-center">
+    <li><a href="about.html">About</a></li>
+    <li><a href="blog/index.html">Blog</a></li>
+    <li><a href="adventures/index.html">Adventures</a></li>
+    <li><a href="climbing-db.html">Climbing DB</a></li>
+    <li><a href="contact.html" class="active">Contact</a></li>
+    <li><span class="sep"></span></li>
+    <li><a href="../index.html" class="pro">Professional ↗</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="theme-toggle" id="themeToggle">☾ Dark</button>
+    <button class="nav-burger" id="burger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="nav-drawer" id="drawer">
+  <a href="about.html">About</a>
+  <a href="blog/index.html">Blog</a>
+  <a href="adventures/index.html">Adventures</a>
+  <a href="climbing-db.html">Climbing DB</a>
+  <a href="contact.html">Contact</a>
+  <a href="../index.html" class="pro">Professional ↗</a>
+  <div class="drawer-theme">
+    <button class="drawer-theme-btn" id="drawerThemeBtn">☾ Switch to Dark</button>
+  </div>
+</div>
+
+<div class="page-wrap">
+  <div>
+    <p class="page-eyebrow">Say hello</p>
+    <h1 class="page-title">Find me <em>online.</em></h1>
+    <div class="intro-text">
+      <!-- ← UPDATE if you want to personalise this -->
+      <p>For climbing partners, adventure ideas, video collabs, or just to say hi — find me on Instagram or YouTube.</p>
+      <p>For anything more professional, the <a href="../contact.html" style="color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent);">professional contact page</a> is the better place.</p>
+    </div>
+  </div>
+
+  <div class="contact-links">
+    <!-- Instagram -->
+    <!-- ← UPDATE href and value -->
+    <a href="https://instagram.com/yourhandle" class="contact-item" target="_blank" rel="noopener">
+      <span class="contact-item-label">Instagram</span>
+      <span class="contact-item-value">@yourhandle</span>
+      <span class="contact-item-arrow">↗</span>
+    </a>
+    <!-- YouTube -->
+    <!-- ← UPDATE href and value -->
+    <a href="https://youtube.com/@yourchannel" class="contact-item" target="_blank" rel="noopener">
+      <span class="contact-item-label">YouTube</span>
+      <span class="contact-item-value">@yourchannel</span>
+      <span class="contact-item-arrow">↗</span>
+    </a>
+    <!-- GitHub -->
+    <!-- ← UPDATE href and value -->
+    <a href="https://github.com/yourprofile" class="contact-item" target="_blank" rel="noopener">
+      <span class="contact-item-label">GitHub</span>
+      <span class="contact-item-value">github.com/yourprofile</span>
+      <span class="contact-item-arrow">↗</span>
+    </a>
+    <!-- LinkedIn -->
+    <!-- ← UPDATE href and value -->
+    <a href="https://linkedin.com/in/yourprofile" class="contact-item" target="_blank" rel="noopener">
+      <span class="contact-item-label">LinkedIn</span>
+      <span class="contact-item-value">linkedin.com/in/yourprofile</span>
+      <span class="contact-item-arrow">↗</span>
+    </a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-left">© <span id="year"></span> Your Name · Personal</div>
+  <a href="../index.html" class="footer-pro">Professional site</a>
+</footer>
+
+<script>
+  const SITE_KEY = 'personal-theme';
+  const DEFAULT  = 'light';
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    const isDark = theme === 'dark';
+    document.getElementById('themeToggle').textContent = isDark ? '☀ Light' : '☾ Dark';
+    document.getElementById('drawerThemeBtn').textContent = isDark ? '☀ Switch to Light' : '☾ Switch to Dark';
+    try { localStorage.setItem(SITE_KEY, theme); } catch(e) {}
+  }
+  function toggleTheme() {
+    applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  }
+  (function() {
+    let saved; try { saved = localStorage.getItem(SITE_KEY); } catch(e) {}
+    applyTheme(saved || DEFAULT);
+  })();
+  document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+  document.getElementById('drawerThemeBtn').addEventListener('click', toggleTheme);
+  document.getElementById('year').textContent = new Date().getFullYear();
+  const burger = document.getElementById('burger');
+  const drawer = document.getElementById('drawer');
+  burger.addEventListener('click', () => {
+    const open = drawer.classList.toggle('open');
+    burger.classList.toggle('open', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+  drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    drawer.classList.remove('open');
+    burger.classList.remove('open');
+    document.body.style.overflow = '';
+  }));
+</script>
+</body>
+</html>
