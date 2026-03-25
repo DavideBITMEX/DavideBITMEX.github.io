@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- ← UPDATE title -->
+  <title>Post Title — Your Name</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root, [data-theme="light"] {
+      --bg: #f5f3ee; --bg2: #ede9e0; --bg3: #e4e0d6;
+      --ink: #1c1a16; --ink-mid: #52503e; --ink-soft: #908e7a;
+      --accent: #6b5c3e; --accent2: #3d6b4f; --rule: #d8d4c8;
+      --serif: 'EB Garamond', Georgia, serif; --mono: 'DM Mono', monospace; --nav-h: 56px;
+    }
+    [data-theme="dark"] {
+      --bg: #0f0e0c; --bg2: #171612; --bg3: #1e1d18;
+      --ink: #e8e4da; --ink-mid: #96917f; --ink-soft: #55513f;
+      --accent: #b89a6a; --accent2: #5a9e74; --rule: #2a2820;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--ink); font-family: var(--serif); font-size: 18px; line-height: 1.7; transition: background 0.3s, color 0.3s; }
+
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; background: var(--bg); border-bottom: 1px solid var(--rule); height: var(--nav-h); display: flex; align-items: center; padding: 0 2.5rem; justify-content: space-between; transition: background 0.3s, border-color 0.3s; }
+    .nav-logo { font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.08em; color: var(--ink-mid); text-decoration: none; flex-shrink: 0; }
+    .nav-logo span { color: var(--accent); }
+    .nav-center { display: flex; gap: 1.8rem; list-style: none; align-items: center; }
+    .nav-center a { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-mid); text-decoration: none; transition: color 0.2s; white-space: nowrap; }
+    .nav-center a:hover, .nav-center a.active { color: var(--accent); }
+    .nav-center .sep { width: 1px; height: 16px; background: var(--rule); flex-shrink: 0; }
+    .nav-center a.pro { color: var(--ink-soft); }
+    .nav-center a.pro:hover { color: var(--accent2); }
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+    .theme-toggle { background: none; border: 1px solid var(--rule); color: var(--ink-soft); cursor: pointer; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.35rem 0.7rem; transition: border-color 0.2s, color 0.2s; white-space: nowrap; }
+    .theme-toggle:hover { border-color: var(--ink-soft); color: var(--ink); }
+    .nav-burger { display: none; flex-direction: column; justify-content: center; gap: 5px; width: 32px; height: 32px; background: none; border: none; cursor: pointer; padding: 4px; }
+    .nav-burger span { display: block; width: 100%; height: 1px; background: var(--ink-mid); transition: transform 0.25s ease, opacity 0.25s ease; transform-origin: center; }
+    .nav-burger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .nav-burger.open span:nth-child(2) { opacity: 0; }
+    .nav-burger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+    .nav-drawer { display: none; position: fixed; top: var(--nav-h); left: 0; right: 0; background: var(--bg); border-bottom: 1px solid var(--rule); z-index: 190; flex-direction: column; padding: 1.5rem 2rem 2rem; transition: background 0.3s; }
+    .nav-drawer.open { display: flex; }
+    .nav-drawer a { font-family: var(--mono); font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-mid); text-decoration: none; padding: 0.9rem 0; border-bottom: 1px solid var(--rule); transition: color 0.2s; }
+    .nav-drawer a:last-of-type { border-bottom: none; }
+    .nav-drawer a:hover { color: var(--accent); }
+    .nav-drawer a.pro { color: var(--ink-soft); }
+    .nav-drawer .drawer-theme { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--rule); }
+    .drawer-theme-btn { background: none; border: 1px solid var(--rule); color: var(--ink-soft); cursor: pointer; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.6rem 1rem; width: 100%; text-align: left; }
+
+    /* ── POST LAYOUT ── */
+    .post-wrap { max-width: 780px; margin: 0 auto; padding: 0 2.5rem 6rem; }
+
+    .back-link { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft); text-decoration: none; padding: calc(var(--nav-h) + 2.5rem) 0 2.5rem; transition: color 0.2s; }
+    .back-link::before { content: '←'; }
+    .back-link:hover { color: var(--accent); }
+
+    .post-header { border-top: 1px solid var(--rule); padding-top: 2.5rem; margin-bottom: 2.5rem; }
+    .post-meta-top { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .post-cat-badge { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); padding: 0.25rem 0.6rem; border: 1px solid var(--accent); }
+    .post-date-badge { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em; color: var(--ink-soft); }
+    .post-title { font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 400; line-height: 1.15; margin-bottom: 1.2rem; }
+    .post-title em { font-style: italic; color: var(--ink-mid); }
+    .post-summary { font-size: 1.1rem; color: var(--ink-mid); line-height: 1.75; margin-bottom: 1.5rem; }
+    .post-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .post-tag { font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.22rem 0.55rem; border: 1px solid var(--rule); color: var(--ink-soft); }
+
+    /* Cover */
+    .post-cover { width: 100%; aspect-ratio: 16/9; background: var(--bg3); overflow: hidden; margin: 2.5rem 0; }
+    .post-cover img { width: 100%; height: 100%; object-fit: cover; }
+    .post-cover-placeholder { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.6rem; color: var(--ink-soft); font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; }
+
+    /* Body text */
+    .post-body { border-top: 1px solid var(--rule); padding-top: 2.5rem; }
+    .post-body h2 { font-size: 1.5rem; font-weight: 400; margin: 2.5rem 0 0.8rem; }
+    .post-body h3 { font-size: 1.1rem; font-weight: 500; margin: 2rem 0 0.6rem; font-family: var(--mono); letter-spacing: 0.04em; color: var(--ink-mid); }
+    .post-body p { color: var(--ink-mid); margin-bottom: 1.2rem; line-height: 1.85; }
+    .post-body ul, .post-body ol { padding-left: 1.5rem; margin-bottom: 1.2rem; color: var(--ink-mid); }
+    .post-body li { margin-bottom: 0.4rem; line-height: 1.75; }
+    .post-body ul li::marker { color: var(--accent); }
+    .post-body strong { color: var(--ink); font-weight: 500; }
+    .post-body em { font-style: italic; }
+    .post-body a { color: var(--accent); }
+    .post-body a:hover { text-decoration: underline; }
+    .post-body hr { border: none; border-top: 1px solid var(--rule); margin: 2.5rem 0; }
+
+    /* ── INLINE PHOTO — single full width ── */
+    /*
+      Usage: <figure class="post-photo">
+               <img src="../../photos/blog/blog-1-photo1.jpg" alt="description" />
+               <figcaption>Optional caption</figcaption>
+             </figure>
+    */
+    .post-photo { margin: 2.5rem 0; }
+    .post-photo img { width: 100%; display: block; }
+    .post-photo figcaption { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.08em; color: var(--ink-soft); margin-top: 0.6rem; line-height: 1.5; }
+
+    /* ── PHOTO PAIR — two photos side by side ── */
+    /*
+      Usage: <div class="post-photo-pair">
+               <figure><img src="..." alt="..." /><figcaption>...</figcaption></figure>
+               <figure><img src="..." alt="..." /><figcaption>...</figcaption></figure>
+             </div>
+    */
+    .post-photo-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 2.5rem 0; }
+    .post-photo-pair figure img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
+    .post-photo-pair figure figcaption { font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.08em; color: var(--ink-soft); margin-top: 0.5rem; line-height: 1.5; }
+
+    /* ── PHOTO TRIO — three photos in a row ── */
+    /*
+      Usage: <div class="post-photo-trio">
+               <figure><img src="..." alt="..." /></figure>
+               <figure><img src="..." alt="..." /></figure>
+               <figure><img src="..." alt="..." /></figure>
+             </div>
+    */
+    .post-photo-trio { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin: 2.5rem 0; }
+    .post-photo-trio figure img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
+    .post-photo-trio figure figcaption { font-family: var(--mono); font-size: 0.56rem; letter-spacing: 0.06em; color: var(--ink-soft); margin-top: 0.4rem; line-height: 1.4; }
+
+    /* ── YOUTUBE EMBED ── */
+    /*
+      Usage: <div class="post-video">
+               <a href="https://www.youtube.com/watch?v=VIDEO_ID" class="video-thumb" target="_blank" rel="noopener">
+                 <img src="https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg" alt="Video title" />
+                 <div class="video-play"><span>▶</span></div>
+               </a>
+               <p class="video-caption">Video title or description</p>
+             </div>
+
+      Replace VIDEO_ID with the actual YouTube video ID (the part after ?v= in the URL)
+      The thumbnail is fetched automatically from YouTube — no need to save it locally.
+    */
+    .post-video { margin: 3rem 0; }
+    .video-thumb {
+      display: block; position: relative;
+      aspect-ratio: 16/9; overflow: hidden;
+      background: var(--bg3);
+    }
+    .video-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s ease; }
+    .video-thumb:hover img { transform: scale(1.03); }
+    .video-play {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(0,0,0,0.3);
+      transition: background 0.2s;
+    }
+    .video-thumb:hover .video-play { background: rgba(0,0,0,0.5); }
+    .video-play span {
+      width: 64px; height: 64px;
+      background: rgba(255,255,255,0.95);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; color: #111;
+      padding-left: 4px; /* optical centering of ▶ */
+      transition: transform 0.2s;
+    }
+    .video-thumb:hover .video-play span { transform: scale(1.1); }
+    .video-caption { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.08em; color: var(--ink-soft); margin-top: 0.8rem; line-height: 1.5; }
+
+    /* ── FOOTER ── */
+    footer { border-top: 1px solid var(--rule); padding: 1.8rem 2.5rem; display: flex; justify-content: space-between; align-items: center; background: var(--bg2); transition: background 0.3s; }
+    .footer-left { font-family: var(--mono); font-size: 0.63rem; letter-spacing: 0.08em; color: var(--ink-soft); }
+    .footer-pro { font-family: var(--mono); font-size: 0.63rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft); text-decoration: none; transition: color 0.2s; }
+    .footer-pro::before { content: '→ '; }
+    .footer-pro:hover { color: var(--accent); }
+
+    @media (max-width: 640px) {
+      nav { padding: 0 1.5rem; }
+      .nav-center, .theme-toggle { display: none; }
+      .nav-burger { display: flex; }
+      .post-wrap { padding: 0 1.5rem 4rem; }
+      .post-photo-pair { grid-template-columns: 1fr; }
+      .post-photo-trio { grid-template-columns: 1fr 1fr; }
+      footer { padding: 1.5rem; flex-direction: column; gap: 0.8rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="../../index.html" class="nav-logo">YN<span>.</span>personal</a>
+  <ul class="nav-center">
+    <li><a href="../../about.html">About</a></li>
+    <!-- ← UPDATE: set class="active" on either Blog or Adventures depending on which section this post belongs to -->
+    <li><a href="../blog/index.html" class="active">Blog</a></li>
+    <li><a href="../adventures/index.html">Adventures</a></li>
+    <li><a href="../../climbing-db.html">Climbing DB</a></li>
+    <li><a href="../../contact.html">Contact</a></li>
+    <li><span class="sep"></span></li>
+    <li><a href="../../../index.html" class="pro">Professional ↗</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="theme-toggle" id="themeToggle">☾ Dark</button>
+    <button class="nav-burger" id="burger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="nav-drawer" id="drawer">
+  <a href="../../about.html">About</a>
+  <a href="../blog/index.html">Blog</a>
+  <a href="../adventures/index.html">Adventures</a>
+  <a href="../../climbing-db.html">Climbing DB</a>
+  <a href="../../contact.html">Contact</a>
+  <a href="../../../index.html" class="pro">Professional ↗</a>
+  <div class="drawer-theme">
+    <button class="drawer-theme-btn" id="drawerThemeBtn">☾ Switch to Dark</button>
+  </div>
+</div>
+
+<div class="post-wrap">
+
+  <!-- ← UPDATE href to point back to blog or adventures index -->
+  <a href="../blog/index.html" class="back-link">Back to Blog</a>
+
+  <!-- POST HEADER -->
+  <div class="post-header">
+    <div class="post-meta-top">
+      <!-- ← UPDATE category and date -->
+      <span class="post-cat-badge">Life</span>
+      <span class="post-date-badge">Jan 2025</span>
+    </div>
+    <!-- ← UPDATE title -->
+    <h1 class="post-title">Moving to Marseille: <em>first impressions.</em></h1>
+    <!-- ← UPDATE summary -->
+    <p class="post-summary">A few weeks in, and I'm still figuring out whether Marseille is chaotic or just honest. Either way, I think I like it.</p>
+    <!-- ← UPDATE tags -->
+    <div class="post-tags">
+      <span class="post-tag">marseille</span>
+      <span class="post-tag">phd life</span>
+      <span class="post-tag">new city</span>
+    </div>
+  </div>
+
+  <!-- COVER IMAGE -->
+  <div class="post-cover">
+    <!-- ← UPDATE: save cover as ../../photos/blog/blog-1.jpg and uncomment -->
+    <!-- <img src="../../photos/blog/blog-1.jpg" alt="Marseille" /> -->
+    <div class="post-cover-placeholder">
+      <span>◫</span>
+      <span>Cover image · ../../photos/blog/blog-1.jpg</span>
+    </div>
+  </div>
+
+  <!-- POST BODY -->
+  <div class="post-body">
+
+    <p>
+      The first thing you notice about Marseille is the light. It hits differently here — sharp, flat, relentless even in January. Coming from Bologna, where the fog sits on the city like a lid, it takes some getting used to.
+    </p>
+
+    <p>
+      I moved here at the start of the year to begin my PhD at CNRS–LMA. The lab is on the edge of the city, in a quiet corner that feels nothing like the chaos of the Vieux-Port. But the chaos is always just a tram ride away, and I like that.
+    </p>
+
+    <!-- Single photo example -->
+    <figure class="post-photo">
+      <!-- ← UPDATE image path and alt text -->
+      <!-- <img src="../../photos/blog/blog-1-photo1.jpg" alt="View from the apartment" /> -->
+      <!-- <figcaption>The view from my apartment window, day one.</figcaption> -->
+    </figure>
+
+    <h2>The city</h2>
+
+    <p>
+      Marseille is a port city and it shows. There's a roughness to it, an unfinished quality, like it's always in the middle of becoming something. Markets that smell of fish and spices, streets where the architecture doesn't quite match, people who speak too fast and too loud and are somehow always right.
+    </p>
+
+    <!-- Two photos side by side -->
+    <div class="post-photo-pair">
+      <figure>
+        <!-- <img src="../../photos/blog/blog-1-photo2.jpg" alt="Vieux-Port" /> -->
+        <!-- <figcaption>Vieux-Port in the morning.</figcaption> -->
+      </figure>
+      <figure>
+        <!-- <img src="../../photos/blog/blog-1-photo3.jpg" alt="Calanques" /> -->
+        <!-- <figcaption>First hike to the Calanques.</figcaption> -->
+      </figure>
+    </div>
+
+    <p>
+      The Calanques are thirty minutes from the city centre by bus. Limestone cliffs dropping straight into the sea, the water so clear it looks edited. I went on a Saturday, and even in winter there were people swimming. I didn't swim. Next time.
+    </p>
+
+    <h2>The lab</h2>
+
+    <p>
+      LMA is a good place to work. Quiet, serious, international in a way that French institutions sometimes aren't. My desk has a window. The coffee machine is two floors down and worth the trip.
+    </p>
+
+    <!-- Three photos in a row -->
+    <div class="post-photo-trio">
+      <figure>
+        <!-- <img src="../../photos/blog/blog-1-photo4.jpg" alt="Lab" /> -->
+      </figure>
+      <figure>
+        <!-- <img src="../../photos/blog/blog-1-photo5.jpg" alt="Desk" /> -->
+      </figure>
+      <figure>
+        <!-- <img src="../../photos/blog/blog-1-photo6.jpg" alt="Building" /> -->
+      </figure>
+    </div>
+
+    <p>
+      I'm still finding my feet, research-wise. But the questions are interesting, the people are kind, and the city is impossible to be bored in. Good enough for now.
+    </p>
+
+    <hr>
+
+    <!-- YouTube video embed -->
+    <!-- ← UPDATE VIDEO_ID with your actual YouTube video ID -->
+    <!-- To find the ID: look at the URL of your video, e.g. youtube.com/watch?v=dQw4w9WgXcQ → ID is dQw4w9WgXcQ -->
+    <div class="post-video">
+      <a href="https://www.youtube.com/watch?v=VIDEO_ID" class="video-thumb" target="_blank" rel="noopener">
+        <img src="https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg" alt="Video title" />
+        <div class="video-play"><span>▶</span></div>
+      </a>
+      <p class="video-caption">← Replace VIDEO_ID above (×2) with your actual YouTube video ID</p>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <div class="footer-left">© <span id="year"></span> Your Name · Personal</div>
+  <a href="../../../index.html" class="footer-pro">Professional site</a>
+</footer>
+
+<script>
+  const SITE_KEY = 'personal-theme';
+  const DEFAULT  = 'light';
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    const isDark = theme === 'dark';
+    document.getElementById('themeToggle').textContent = isDark ? '☀ Light' : '☾ Dark';
+    document.getElementById('drawerThemeBtn').textContent = isDark ? '☀ Switch to Light' : '☾ Switch to Dark';
+    try { localStorage.setItem(SITE_KEY, theme); } catch(e) {}
+  }
+  function toggleTheme() {
+    applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  }
+  (function() {
+    let saved; try { saved = localStorage.getItem(SITE_KEY); } catch(e) {}
+    applyTheme(saved || DEFAULT);
+  })();
+  document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+  document.getElementById('drawerThemeBtn').addEventListener('click', toggleTheme);
+  document.getElementById('year').textContent = new Date().getFullYear();
+  const burger = document.getElementById('burger');
+  const drawer = document.getElementById('drawer');
+  burger.addEventListener('click', () => {
+    const open = drawer.classList.toggle('open');
+    burger.classList.toggle('open', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+  drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    drawer.classList.remove('open');
+    burger.classList.remove('open');
+    document.body.style.overflow = '';
+  }));
+</script>
+</body>
+</html>
