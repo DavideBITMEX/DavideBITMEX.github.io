@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — Your Name</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root, [data-theme="light"] {
+      --bg: #f5f3ee; --bg2: #ede9e0; --bg3: #e4e0d6;
+      --ink: #1c1a16; --ink-mid: #52503e; --ink-soft: #908e7a;
+      --accent: #6b5c3e; --accent2: #3d6b4f; --rule: #d8d4c8;
+      --serif: 'EB Garamond', Georgia, serif; --mono: 'DM Mono', monospace; --nav-h: 56px;
+    }
+    [data-theme="dark"] {
+      --bg: #0f0e0c; --bg2: #171612; --bg3: #1e1d18;
+      --ink: #e8e4da; --ink-mid: #96917f; --ink-soft: #55513f;
+      --accent: #b89a6a; --accent2: #5a9e74; --rule: #2a2820;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--ink); font-family: var(--serif); font-size: 18px; line-height: 1.7; transition: background 0.3s, color 0.3s; }
+
+    /* ── NAV ── */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; background: var(--bg); border-bottom: 1px solid var(--rule); height: var(--nav-h); display: flex; align-items: center; padding: 0 2.5rem; justify-content: space-between; transition: background 0.3s, border-color 0.3s; }
+    .nav-logo { font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.08em; color: var(--ink-mid); text-decoration: none; flex-shrink: 0; }
+    .nav-logo span { color: var(--accent); }
+    .nav-center { display: flex; gap: 1.8rem; list-style: none; align-items: center; }
+    .nav-center a { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-mid); text-decoration: none; transition: color 0.2s; white-space: nowrap; }
+    .nav-center a:hover, .nav-center a.active { color: var(--accent); }
+    .nav-center .sep { width: 1px; height: 16px; background: var(--rule); flex-shrink: 0; }
+    .nav-center a.pro { color: var(--ink-soft); }
+    .nav-center a.pro:hover { color: var(--accent2); }
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+    .theme-toggle { background: none; border: 1px solid var(--rule); color: var(--ink-soft); cursor: pointer; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.35rem 0.7rem; transition: border-color 0.2s, color 0.2s; white-space: nowrap; }
+    .theme-toggle:hover { border-color: var(--ink-soft); color: var(--ink); }
+    .nav-burger { display: none; flex-direction: column; justify-content: center; gap: 5px; width: 32px; height: 32px; background: none; border: none; cursor: pointer; padding: 4px; }
+    .nav-burger span { display: block; width: 100%; height: 1px; background: var(--ink-mid); transition: transform 0.25s ease, opacity 0.25s ease; transform-origin: center; }
+    .nav-burger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .nav-burger.open span:nth-child(2) { opacity: 0; }
+    .nav-burger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+    .nav-drawer { display: none; position: fixed; top: var(--nav-h); left: 0; right: 0; background: var(--bg); border-bottom: 1px solid var(--rule); z-index: 190; flex-direction: column; padding: 1.5rem 2rem 2rem; transition: background 0.3s; }
+    .nav-drawer.open { display: flex; }
+    .nav-drawer a { font-family: var(--mono); font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-mid); text-decoration: none; padding: 0.9rem 0; border-bottom: 1px solid var(--rule); transition: color 0.2s; }
+    .nav-drawer a:last-of-type { border-bottom: none; }
+    .nav-drawer a:hover { color: var(--accent); }
+    .nav-drawer a.pro { color: var(--ink-soft); }
+    .nav-drawer .drawer-theme { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--rule); }
+    .drawer-theme-btn { background: none; border: 1px solid var(--rule); color: var(--ink-soft); cursor: pointer; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.6rem 1rem; width: 100%; text-align: left; }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      padding: calc(var(--nav-h) + 4rem) 4rem 4rem;
+      border-bottom: 1px solid var(--rule);
+      max-width: 1100px; margin: 0 auto;
+    }
+    .page-eyebrow { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.8rem; }
+    .page-title { font-size: clamp(2.2rem, 4vw, 3.4rem); font-weight: 400; line-height: 1.1; }
+    .page-title em { font-style: italic; color: var(--ink-mid); }
+
+    /* ── SECTIONS ── */
+    .content-wrap { max-width: 1100px; margin: 0 auto; padding: 0 4rem 6rem; }
+
+    .about-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+      padding: 5rem 0;
+      border-bottom: 1px solid var(--rule);
+    }
+    .about-section:last-child { border-bottom: none; }
+
+    /* Alternating: odd sections photo left, even sections photo right */
+    .about-section.photo-right { direction: rtl; }
+    .about-section.photo-right > * { direction: ltr; }
+
+    /* Photo */
+    .about-photo {
+      aspect-ratio: 4/5;
+      background: var(--bg2);
+      border: 1px solid var(--rule);
+      overflow: hidden;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .about-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .about-photo-placeholder {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 0.6rem;
+    }
+    .about-photo-placeholder span {
+      font-family: var(--mono); font-size: 0.6rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--ink-soft); text-align: center; padding: 0 1rem;
+    }
+    .ph-icon { font-size: 1.8rem; opacity: 0.2; }
+
+    /* Text */
+    .about-text {}
+    .about-section-eyebrow {
+      font-family: var(--mono); font-size: 0.62rem;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 0.8rem;
+    }
+    .about-section-title {
+      font-size: clamp(1.5rem, 2.5vw, 2rem);
+      font-weight: 400; line-height: 1.2;
+      margin-bottom: 1.5rem;
+    }
+    .about-section-title em { font-style: italic; color: var(--ink-mid); }
+    .about-text p {
+      color: var(--ink-mid); font-size: 1rem;
+      line-height: 1.85; margin-bottom: 1.1rem;
+    }
+    .about-text p:last-of-type { margin-bottom: 0; }
+
+    .about-btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-family: var(--mono); font-size: 0.65rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--ink-mid); text-decoration: none;
+      border: 1px solid var(--rule); padding: 0.6rem 1.2rem;
+      margin-top: 1.8rem; transition: all 0.2s;
+    }
+    .about-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .about-btn-pro { border-color: var(--accent); color: var(--accent); }
+    .about-btn-pro:hover { background: var(--accent); color: var(--bg); }
+
+    /* ── FOOTER ── */
+    footer { border-top: 1px solid var(--rule); padding: 1.8rem 2.5rem; display: flex; justify-content: space-between; align-items: center; background: var(--bg2); transition: background 0.3s; }
+    .footer-left { font-family: var(--mono); font-size: 0.63rem; letter-spacing: 0.08em; color: var(--ink-soft); }
+    .footer-pro { font-family: var(--mono); font-size: 0.63rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft); text-decoration: none; transition: color 0.2s; }
+    .footer-pro::before { content: '→ '; }
+    .footer-pro:hover { color: var(--accent); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 960px) {
+      .page-header { padding: calc(var(--nav-h) + 2.5rem) 2.5rem 2.5rem; }
+      .content-wrap { padding: 0 2.5rem 5rem; }
+      .about-section { grid-template-columns: 1fr; gap: 2.5rem; }
+      .about-section.photo-right { direction: ltr; }
+      /* On mobile always show photo first */
+      .about-section.photo-right .about-photo { order: -1; }
+      .about-photo { aspect-ratio: 16/9; }
+    }
+    @media (max-width: 640px) {
+      nav { padding: 0 1.5rem; }
+      .nav-center, .theme-toggle { display: none; }
+      .nav-burger { display: flex; }
+      .page-header { padding: calc(var(--nav-h) + 2rem) 1.5rem 2rem; }
+      .content-wrap { padding: 0 1.5rem 4rem; }
+      .about-section { padding: 3rem 0; }
+      footer { padding: 1.5rem; flex-direction: column; gap: 0.8rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">YN<span>.</span>personal</a>
+  <ul class="nav-center">
+    <li><a href="about.html" class="active">About</a></li>
+    <li><a href="blog/index.html">Blog</a></li>
+    <li><a href="adventures/index.html">Adventures</a></li>
+    <li><a href="climbing-db.html">Climbing DB</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><span class="sep"></span></li>
+    <li><a href="../index.html" class="pro">Professional ↗</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="theme-toggle" id="themeToggle">☾ Dark</button>
+    <button class="nav-burger" id="burger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="nav-drawer" id="drawer">
+  <a href="about.html">About</a>
+  <a href="blog/index.html">Blog</a>
+  <a href="adventures/index.html">Adventures</a>
+  <a href="climbing-db.html">Climbing DB</a>
+  <a href="contact.html">Contact</a>
+  <a href="../index.html" class="pro">Professional ↗</a>
+  <div class="drawer-theme">
+    <button class="drawer-theme-btn" id="drawerThemeBtn">☾ Switch to Dark</button>
+  </div>
+</div>
+
+<div class="page-header">
+  <p class="page-eyebrow">The person behind the research</p>
+  <h1 class="page-title">About <em>me.</em></h1>
+</div>
+
+<div class="content-wrap">
+
+  <!-- ── SECTION 1: Who I am — photo LEFT ── -->
+  <div class="about-section">
+    <div class="about-photo">
+      <!-- ← save photo as photos/about/about-1.jpg then uncomment -->
+      <!-- <img src="photos/about/about-1.jpg" alt="Your Name" /> -->
+      <div class="about-photo-placeholder">
+        <span class="ph-icon">◎</span>
+        <span>photos/about/about-1.jpg</span>
+      </div>
+    </div>
+    <div class="about-text">
+      <p class="about-section-eyebrow">Who I am</p>
+      <h2 class="about-section-title">Hi, I'm <em>Your Name.</em></h2>
+      <!-- ← WRITE YOUR OWN BIO HERE — this is just a preset to get you started -->
+      <p>
+        [Write your own intro here. A few sentences about who you are as a person — not just as a researcher. Where you're from, what drives you, what kind of person you are outside the lab.]
+      </p>
+      <p>
+        [A second paragraph if you want. Something personal — a value, a contradiction, something that makes you you.]
+      </p>
+    </div>
+  </div>
+
+  <!-- ── SECTION 2: Climbing & Adventures — photo RIGHT ── -->
+  <div class="about-section photo-right">
+    <div class="about-photo">
+      <!-- ← save photo as photos/about/about-2.jpg then uncomment -->
+      <!-- <img src="photos/about/about-2.jpg" alt="Climbing" /> -->
+      <div class="about-photo-placeholder">
+        <span class="ph-icon">⛰</span>
+        <span>photos/about/about-2.jpg</span>
+      </div>
+    </div>
+    <div class="about-text">
+      <p class="about-section-eyebrow">Climbing & Adventures</p>
+      <h2 class="about-section-title">On rock, <em>in motion.</em></h2>
+      <p>
+        Climbing is the other thing I take seriously. I've been climbing for [X] years, and in that time it's taken me to some places I wouldn't have found any other way — crack systems in Valle dell'Orco, sea cliffs in the Calanques, multipitches in the Dolomites.
+      </p>
+      <p>
+        I'm particularly drawn to trad climbing and long multipitch routes — the kind where the commitment is real and you can't always see what's next. When I'm not on rock, I'm usually looking for the next place to go.
+      </p>
+      <a href="adventures/index.html" class="about-btn">See adventures →</a>
+    </div>
+  </div>
+
+  <!-- ── SECTION 3: Places & Work — photo LEFT ── -->
+  <div class="about-section">
+    <div class="about-photo">
+      <!-- ← save photo as photos/about/about-3.jpg then uncomment -->
+      <!-- <img src="photos/about/about-3.jpg" alt="Places" /> -->
+      <div class="about-photo-placeholder">
+        <span class="ph-icon">✈</span>
+        <span>photos/about/about-3.jpg</span>
+      </div>
+    </div>
+    <div class="about-text">
+      <p class="about-section-eyebrow">Places & Work</p>
+      <h2 class="about-section-title">A life spent <em>moving.</em></h2>
+      <p>
+        I grew up in Italy and studied in Bologna, where I got my BSc in Statistical Sciences and my MSc in Data Science. During my MSc I spent a year at <strong>Woods Hole Oceanographic Institution (WHOI)</strong> in Massachusetts — my first real dive into ocean acoustics and bioacoustics research.
+      </p>
+      <p>
+        After graduating I worked as a Research Associate and Data Scientist at the <strong>German Oceanographic Museum (DMM)</strong> in Stralsund, Germany, and started volunteering as a Data Scientist for the NGO <strong>Centile Patagonia</strong>. I'm now based in Marseille, doing my PhD at <strong>CNRS–LMA</strong> on underwater acoustics and seismology as part of a Marie Curie Doctoral Network.
+      </p>
+      <a href="../index.html" class="about-btn about-btn-pro">Professional profile ↗</a>
+    </div>
+  </div>
+
+  <!-- ── SECTION 4: Web Apps — photo RIGHT ── -->
+  <div class="about-section photo-right">
+    <div class="about-photo">
+      <!-- ← save photo as photos/about/about-4.jpg then uncomment -->
+      <!-- <img src="photos/about/about-4.jpg" alt="Web development" /> -->
+      <div class="about-photo-placeholder">
+        <span class="ph-icon">⌨</span>
+        <span>photos/about/about-4.jpg</span>
+      </div>
+    </div>
+    <div class="about-text">
+      <p class="about-section-eyebrow">Building things</p>
+      <h2 class="about-section-title">Web apps &amp; <em>tinkering.</em></h2>
+      <p>
+        Alongside research, I enjoy building web applications — in <strong>R Shiny</strong> and plain <strong>HTML/CSS/JS</strong>. Some of it is for scientific outreach: making data or simulations accessible in a browser, turning a result into something people can actually interact with.
+      </p>
+      <p>
+        Some of it is just for fun — tools I wanted to exist, visualisations that seemed interesting, side projects that go nowhere but taught me something. This website is one of those.
+      </p>
+      <a href="../projects/index.html" class="about-btn">See projects →</a>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-left">© <span id="year"></span> Your Name · Personal</div>
+  <a href="../index.html" class="footer-pro">Professional site</a>
+</footer>
+
+<script>
+  const SITE_KEY = 'personal-theme';
+  const DEFAULT  = 'light';
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    const isDark = theme === 'dark';
+    document.getElementById('themeToggle').textContent = isDark ? '☀ Light' : '☾ Dark';
+    document.getElementById('drawerThemeBtn').textContent = isDark ? '☀ Switch to Light' : '☾ Switch to Dark';
+    try { localStorage.setItem(SITE_KEY, theme); } catch(e) {}
+  }
+  function toggleTheme() {
+    applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  }
+  (function() {
+    let saved; try { saved = localStorage.getItem(SITE_KEY); } catch(e) {}
+    applyTheme(saved || DEFAULT);
+  })();
+  document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+  document.getElementById('drawerThemeBtn').addEventListener('click', toggleTheme);
+  document.getElementById('year').textContent = new Date().getFullYear();
+  const burger = document.getElementById('burger');
+  const drawer = document.getElementById('drawer');
+  burger.addEventListener('click', () => {
+    const open = drawer.classList.toggle('open');
+    burger.classList.toggle('open', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+  drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    drawer.classList.remove('open');
+    burger.classList.remove('open');
+    document.body.style.overflow = '';
+  }));
+</script>
+</body>
+</html>
