@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Climbing Database — Your Name</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root, [data-theme="light"] {
+      --bg: #f5f3ee; --bg2: #ede9e0; --bg3: #e4e0d6;
+      --ink: #1c1a16; --ink-mid: #52503e; --ink-soft: #908e7a;
+      --accent: #6b5c3e; --accent2: #3d6b4f; --rule: #d8d4c8;
+      --serif: 'EB Garamond', Georgia, serif; --mono: 'DM Mono', monospace; --nav-h: 56px;
+    }
+    [data-theme="dark"] {
+      --bg: #0f0e0c; --bg2: #171612; --bg3: #1e1d18;
+      --ink: #e8e4da; --ink-mid: #96917f; --ink-soft: #55513f;
+      --accent: #b89a6a; --accent2: #5a9e74; --rule: #2a2820;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--ink); font-family: var(--serif); font-size: 18px; line-height: 1.7; transition: background 0.3s, color 0.3s; }
+
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; background: var(--bg); border-bottom: 1px solid var(--rule); height: var(--nav-h); display: flex; align-items: center; padding: 0 2.5rem; justify-content: space-between; transition: background 0.3s, border-color 0.3s; }
+    .nav-logo { font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.08em; color: var(--ink-mid); text-decoration: none; flex-shrink: 0; }
+    .nav-logo span { color: var(--accent); }
+    .nav-center { display: flex; gap: 1.8rem; list-style: none; align-items: center; }
+    .nav-center a { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-mid); text-decoration: none; transition: color 0.2s; white-space: nowrap; }
+    .nav-center a:hover, .nav-center a.active { color: var(--accent); }
+    .nav-center .sep { width: 1px; height: 16px; background: var(--rule); flex-shrink: 0; }
+    .nav-center a.pro { color: var(--ink-soft); }
+    .nav-center a.pro:hover { color: var(--accent2); }
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+    .theme-toggle { background: none; border: 1px solid var(--rule); color: var(--ink-soft); cursor: pointer; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.35rem 0.7rem; transition: border-color 0.2s, color 0.2s; white-space: nowrap; }
+    .theme-toggle:hover { border-color: var(--ink-soft); color: var(--ink); }
+    .nav-burger { display: none; flex-direction: column; justify-content: center; gap: 5px; width: 32px; height: 32px; background: none; border: none; cursor: pointer; padding: 4px; }
+    .nav-burger span { display: block; width: 100%; height: 1px; background: var(--ink-mid); transition: transform 0.25s ease, opacity 0.25s ease; transform-origin: center; }
+    .nav-burger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .nav-burger.open span:nth-child(2) { opacity: 0; }
+    .nav-burger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+    .nav-drawer { display: none; position: fixed; top: var(--nav-h); left: 0; right: 0; background: var(--bg); border-bottom: 1px solid var(--rule); z-index: 190; flex-direction: column; padding: 1.5rem 2rem 2rem; transition: background 0.3s; }
+    .nav-drawer.open { display: flex; }
+    .nav-drawer a { font-family: var(--mono); font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-mid); text-decoration: none; padding: 0.9rem 0; border-bottom: 1px solid var(--rule); transition: color 0.2s; }
+    .nav-drawer a:last-of-type { border-bottom: none; }
+    .nav-drawer a:hover { color: var(--accent); }
+    .nav-drawer a.pro { color: var(--ink-soft); }
+    .nav-drawer .drawer-theme { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--rule); }
+    .drawer-theme-btn { background: none; border: 1px solid var(--rule); color: var(--ink-soft); cursor: pointer; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.6rem 1rem; width: 100%; text-align: left; }
+
+    .page-header { padding: calc(var(--nav-h) + 4rem) 4rem 3rem; border-bottom: 1px solid var(--rule); max-width: 1300px; margin: 0 auto; }
+    .page-eyebrow { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.8rem; }
+    .page-title { font-size: clamp(2.2rem, 4vw, 3.4rem); font-weight: 400; line-height: 1.1; margin-bottom: 1rem; }
+    .page-title em { font-style: italic; color: var(--ink-mid); }
+    .page-desc { font-size: 1rem; color: var(--ink-mid); max-width: 56ch; }
+    .content-wrap { max-width: 1300px; margin: 0 auto; padding: 0 4rem 6rem; }
+
+    .db-section { padding: 4rem 0; border-bottom: 1px solid var(--rule); }
+    .db-section:last-child { border-bottom: none; }
+    .section-header { display: flex; align-items: center; justify-content: space-between; gap: 2rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .section-label { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-soft); display: flex; align-items: center; gap: 1rem; flex: 1; }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+    .entry-count { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft); white-space: nowrap; }
+
+    .sort-controls { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 2rem; flex-wrap: wrap; }
+    .sort-label { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft); flex-shrink: 0; }
+    .sort-btn { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.3rem 0.75rem; border: 1px solid var(--rule); background: none; color: var(--ink-soft); cursor: pointer; transition: all 0.18s; display: flex; align-items: center; gap: 0.3rem; }
+    .sort-btn:hover { border-color: var(--ink-mid); color: var(--ink); }
+    .sort-btn.active { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+
+    .db-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .db-table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+    .db-table thead tr { border-bottom: 2px solid var(--rule); }
+    .db-table th { font-family: var(--mono); font-size: 0.56rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft); font-weight: 400; padding: 0.6rem 0.8rem 0.6rem 0; text-align: left; white-space: nowrap; }
+    .db-table td { padding: 0.85rem 0.8rem 0.85rem 0; border-bottom: 1px solid var(--rule); color: var(--ink-mid); vertical-align: top; line-height: 1.4; }
+    .db-table tr:last-child td { border-bottom: none; }
+    .db-table tr:hover td { color: var(--ink); background: var(--bg2); }
+
+    .col-n { font-family: var(--mono); font-size: 0.65rem; color: var(--ink-soft) !important; text-align: right; padding-right: 1.2rem !important; width: 32px; }
+    .col-name { color: var(--ink) !important; font-weight: 500; min-width: 130px; }
+    .col-grade { font-family: var(--mono); font-size: 0.76rem; color: var(--accent) !important; white-space: nowrap; }
+    .col-onsight { font-family: var(--mono); font-size: 0.68rem; text-transform: uppercase; white-space: nowrap; }
+    .onsight-yes { color: var(--accent2) !important; }
+    .onsight-no { color: var(--ink-soft) !important; }
+    .col-date { font-family: var(--mono); font-size: 0.7rem; white-space: nowrap; }
+    .col-num { font-family: var(--mono); font-size: 0.72rem; }
+    .col-notes { font-size: 0.82rem; font-style: italic; max-width: 180px; }
+    .col-link a { font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); text-decoration: none; }
+    .col-link a:hover { text-decoration: underline; }
+
+    .see-more-wrap { margin-top: 1.5rem; }
+    .see-more-btn { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; background: none; border: 1px solid var(--rule); color: var(--ink-soft); padding: 0.6rem 1.4rem; cursor: pointer; transition: all 0.2s; }
+    .see-more-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .see-more-btn.expanded { color: var(--accent2); border-color: var(--accent2); }
+
+    footer { border-top: 1px solid var(--rule); padding: 1.8rem 2.5rem; display: flex; justify-content: space-between; align-items: center; background: var(--bg2); transition: background 0.3s; }
+    .footer-left { font-family: var(--mono); font-size: 0.63rem; letter-spacing: 0.08em; color: var(--ink-soft); }
+    .footer-pro { font-family: var(--mono); font-size: 0.63rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft); text-decoration: none; transition: color 0.2s; }
+    .footer-pro::before { content: '→ '; }
+    .footer-pro:hover { color: var(--accent); }
+
+    @media (max-width: 960px) {
+      .page-header { padding: calc(var(--nav-h) + 2.5rem) 2.5rem 2.5rem; }
+      .content-wrap { padding: 0 2.5rem 5rem; }
+    }
+    @media (max-width: 640px) {
+      nav { padding: 0 1.5rem; }
+      .nav-center, .theme-toggle { display: none; }
+      .nav-burger { display: flex; }
+      .page-header { padding: calc(var(--nav-h) + 2rem) 1.5rem 2rem; }
+      .content-wrap { padding: 0 1.5rem 4rem; }
+      footer { padding: 1.5rem; flex-direction: column; gap: 0.8rem; text-align: center; }
+    }
+
+    /* ── Map section ── */
+    .map-intro { font-size: 0.92rem; color: var(--ink-mid); max-width: 64ch; margin-bottom: 1.4rem; line-height: 1.65; }
+    .map-controls-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.2rem; }
+    .map-filter-btns { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .map-filter-btn { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.35rem 0.85rem; border: 1px solid var(--rule); background: none; color: var(--ink-soft); cursor: pointer; transition: all 0.18s; }
+    .map-filter-btn:hover { border-color: var(--ink-mid); color: var(--ink); }
+    .map-filter-btn.active { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+    .open-map-btn { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; background: none; border: 1px solid var(--accent); color: var(--accent); padding: 0.5rem 1.2rem; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+    .open-map-btn:hover { background: var(--accent); color: var(--bg); }
+    .open-map-btn.active { background: var(--accent); color: var(--bg); }
+    .map-container { margin-top: 0.8rem; border: 1px solid var(--rule); overflow: hidden; }
+    #climbingMap { height: 480px; width: 100%; background: var(--bg2); }
+    .leaflet-popup-content-wrapper { border-radius: 0 !important; font-family: var(--serif); background: var(--bg) !important; color: var(--ink) !important; border: 1px solid var(--rule) !important; box-shadow: 0 4px 20px rgba(0,0,0,0.12) !important; }
+    .leaflet-popup-tip { background: var(--bg) !important; }
+    .popup-name { font-size: 0.98rem; font-weight: 500; color: var(--ink); margin-bottom: 0.2rem; }
+    .popup-area { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.08em; color: var(--ink-soft); text-transform: uppercase; margin-bottom: 0.45rem; }
+    .popup-badge { display: inline-block; font-family: var(--mono); font-size: 0.55rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.18rem 0.5rem; margin-bottom: 0.45rem; }
+    .popup-badge.mp   { background: var(--accent);  color: var(--bg); }
+    .popup-badge.trad { background: var(--accent2); color: var(--bg); }
+    .popup-grade { font-family: var(--mono); font-size: 0.78rem; color: var(--accent); }
+    .popup-meta  { font-size: 0.78rem; color: var(--ink-mid); margin-top: 0.25rem; line-height: 1.5; }
+    .custom-cluster { display: flex; align-items: center; justify-content: center; border-radius: 50%; font-family: var(--mono); font-size: 0.72rem; border: 2.5px solid white; box-shadow: 0 2px 10px rgba(0,0,0,0.25); color: white; cursor: pointer; transition: transform 0.15s; }
+    .custom-cluster:hover { transform: scale(1.1); }
+    .cluster-mixed { background: #7c6a4a; }
+    .cluster-mp    { background: #6b5c3e; }
+    .cluster-trad  { background: #3d6b4f; }
+    /* Legend */
+    .map-container { position: relative; }
+    .map-legend { position: absolute; bottom: 24px; left: 12px; z-index: 1000; background: var(--bg); border: 1px solid var(--rule); padding: 0.55rem 0.85rem; display: flex; flex-direction: column; gap: 0.4rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); pointer-events: none; }
+    .legend-item { display: flex; align-items: center; gap: 0.55rem; }
+    .legend-pin { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 36px; font-size: 1.1rem; line-height: 1; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.25)); }
+    .mp-pin   { color: #6b5c3e; }
+    .trad-pin { color: #3d6b4f; }
+    .legend-cluster { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; font-size: 0.7rem; border-radius: 50%; background: #7c6a4a; color: white; border: 2px solid white; box-shadow: 0 1px 4px rgba(0,0,0,0.2); }
+    .legend-label { font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-mid); }
+    @media (max-width: 640px) {
+      .map-controls-row { flex-direction: column; align-items: flex-start; }
+      #climbingMap { height: 340px; }
+      .map-legend { bottom: 16px; padding: 0.4rem 0.65rem; gap: 0.3rem; }
+    }
+  </style>
+  <!-- Leaflet + MarkerCluster -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.min.js"></script>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Davide<span> </span>Bittelli</a>
+  <ul class="nav-center">
+    <li><a href="about.html">About</a></li>
+    <li><a href="blog/index.html">Blog</a></li>
+    <li><a href="adventures/index.html">Adventures</a></li>
+    <li><a href="climbing-db.html" class="active">Climbing DB</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><span class="sep"></span></li>
+    <li><a href="../index.html" class="pro">Professional ↗</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="theme-toggle" id="themeToggle">☾ Dark</button>
+    <button class="nav-burger" id="burger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="nav-drawer" id="drawer">
+  <a href="about.html">About</a>
+  <a href="blog/index.html">Blog</a>
+  <a href="adventures/index.html">Adventures</a>
+  <a href="climbing-db.html">Climbing DB</a>
+  <a href="contact.html">Contact</a>
+  <a href="../index.html" class="pro">Professional ↗</a>
+  <div class="drawer-theme">
+    <button class="drawer-theme-btn" id="drawerThemeBtn">☾ Switch to Dark</button>
+  </div>
+</div>
+
+<div class="page-header">
+  <p class="page-eyebrow">Personal logbook</p>
+  <h1 class="page-title">Climbing <em>database.</em></h1>
+  <p class="page-desc">A personal record of multipitch routes and trad climbs. N = chronological order (1 = first ever).</p>
+</div>
+
+<div class="content-wrap">
+
+  <!-- ══════════════════════════════ MAP ══════════════════════════════ -->
+  <div class="db-section">
+    <div class="section-header">
+      <div class="section-label">Routes Map</div>
+    </div>
+    <p class="map-intro">
+      The map shows all logged routes with coordinates. Pins cluster by proximity — tap a cluster to zoom in; at maximum zoom they fan out so you can open each route individually. Use the filters to switch between route types.
+    </p>
+    <div class="map-controls-row">
+      <div class="map-filter-btns">
+        <button class="map-filter-btn active" data-filter="all">All routes</button>
+        <button class="map-filter-btn" data-filter="mp">Multipitches</button>
+        <button class="map-filter-btn" data-filter="trad">Trad</button>
+      </div>
+      <button class="open-map-btn" id="openMapBtn">Open the Map ↗</button>
+    </div>
+    <div class="map-container" id="mapContainer" style="display:none;">
+      <div id="climbingMap"></div>
+      <div class="map-legend">
+        <div class="legend-item"><span class="legend-pin mp-pin">&#x26F0;</span><span class="legend-label">Multipitch</span></div>
+        <div class="legend-item"><span class="legend-pin trad-pin">&#x1FAA8;</span><span class="legend-label">Trad</span></div>
+        <div class="legend-item"><span class="legend-cluster cluster-mixed-demo">4+</span><span class="legend-label">Mixed cluster</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ MULTIPITCH ══════════════════════════════ -->
+  <!--
+    HOW TO ADD A NEW ENTRY:
+    1. Add a new <tr> at the TOP of tbody (most recent = highest N)
+    2. Set data-n, data-grade-max, data-grade-obl, data-pitches, data-length
+    3. Add data-lat="XX.XXXX" data-lng="Y.YYYY" if you have coordinates (route appears on map)
+    4. Update the N column value accordingly
+    5. If it should be hidden by default, add class="extra-mp"
+  -->
+  <div class="db-section">
+    <div class="section-header">
+      <div class="section-label">Multipitches</div>
+      <span class="entry-count" id="mp-count"></span>
+    </div>
+    <div class="sort-controls">
+      <span class="sort-label">Sort by</span>
+      <button class="sort-btn active" data-tbody="mp-tbody" data-col="n" data-dir="desc">N <span>↓</span></button>
+      <button class="sort-btn" data-tbody="mp-tbody" data-col="grade-max" data-dir="desc">Grade max <span>↓</span></button>
+      <button class="sort-btn" data-tbody="mp-tbody" data-col="grade-obl" data-dir="desc">Grade obbl <span>↓</span></button>
+      <button class="sort-btn" data-tbody="mp-tbody" data-col="pitches" data-dir="desc">Pitches <span>↓</span></button>
+      <button class="sort-btn" data-tbody="mp-tbody" data-col="length" data-dir="desc">Length <span>↓</span></button>
+    </div>
+    <div class="db-table-wrap">
+      <table class="db-table">
+        <thead>
+          <tr>
+            <th>N</th><th>Route</th><th>Area / Sector</th><th>Country</th><th>Date</th>
+            <th>Grade max</th><th>Grade obbl</th><th>Pitches</th><th>Length (m)</th>
+            <th>Onsight</th><th>Partners</th><th>Notes</th><th>Link</th>
+          </tr>
+        </thead>
+        <tbody id="mp-tbody">
+          <!-- N=X most recent, shown by default (top 10), rest hidden -->
+          <tr data-lat="43.2122" data-lng="5.4289" data-n="21" data-grade-max="6b" data-grade-obl="6a" data-pitches="3" data-length="65">
+            <td class="col-n">21</td><td class="col-name">Sieste appeal</td><td>Calanque de Sormiou</td><td>France</td>
+            <td class="col-date">May 2026</td><td class="col-grade">6b</td><td class="col-grade">6a</td>
+            <td class="col-num">3</td><td class="col-num">65</td>
+            <td class="col-onsight onsight-no">No</td><td>Caterina P. & Cheddar</td>
+            <td class="col-notes">Almost alpine conditions 😂</td><td class="col-link"></td>
+          </tr>
+          <tr data-n="20" data-grade-max="6a+" data-grade-obl="6a" data-pitches="5" data-length="120">
+            <td class="col-n">20</td><td class="col-name">T’Es Pas Cap’ Petite Canaille</td><td>Cap’ Canaille, Cassis</td><td>France</td>
+            <td class="col-date">May 2026</td><td class="col-grade">6a+</td><td class="col-grade">6a</td>
+            <td class="col-num">5</td><td class="col-num">120</td>
+            <td class="col-onsight onsight-no">Yes</td><td>Violette C.</td>
+            <td class="col-notes">Easy, beautiful and well protected. Last pitch was really fun (diedre + crack).</td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="43.2101" data-lng="5.3688" data-n="19" data-grade-max="3b" data-grade-obl="3b" data-pitches="3" data-length="100">
+            <td class="col-n">19</td><td class="col-name">Couloir Choberg</td><td>Marseilleveyre</td><td>France</td>
+            <td class="col-date">April 2026</td><td class="col-grade">3b</td><td class="col-grade">3b</td>
+            <td class="col-num">3</td><td class="col-num">100</td>
+            <td class="col-onsight onsight-no">Yes</td><td>/</td>
+            <td class="col-notes"></td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="43.2115" data-lng="5.4468" data-n="18" data-grade-max="6b" data-grade-obl="6a+" data-pitches="3" data-length="100">
+            <td class="col-n">18</td><td class="col-name">Vénus</td><td>Calanque de Morgiou</td><td>France</td>
+            <td class="col-date">March 2026</td><td class="col-grade">6b</td><td class="col-grade">6a+</td>
+            <td class="col-num">3</td><td class="col-num">100</td>
+            <td class="col-onsight onsight-no">No</td><td>Lorenzo C.</td>
+            <td class="col-notes">Great climb, bolts far apart. A big rock fell during the traverse. Glad I brought the nuts (last anchor had 1 bolt missing)</td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="43.2098" data-lng="5.3692" data-n="17" data-grade-max="6a" data-grade-obl="5c" data-pitches="4" data-length="110">
+            <td class="col-n">17</td><td class="col-name">Voie de la colonne</td><td>Marseilleveyre</td><td>France</td>
+            <td class="col-date">March 2026</td><td class="col-grade">6a</td><td class="col-grade">5c</td>
+            <td class="col-num">4</td><td class="col-num">110</td>
+            <td class="col-onsight onsight-yes">Yes</td><td>Caterina P.</td>
+            <td class="col-notes">Pitch 4 great exposure on the crest</td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="43.2098" data-lng="5.3522" data-n="16" data-grade-max="5c" data-grade-obl="4c" data-pitches="4" data-length="110">
+            <td class="col-n">16</td><td class="col-name">Arête de la cordée</td><td>Les Goudes, Calanques</td><td>France</td>
+            <td class="col-date">Mar 2026</td><td class="col-grade">5c</td><td class="col-grade">4c</td>
+            <td class="col-num">4</td><td class="col-num">110</td>
+            <td class="col-onsight onsight-yes">Yes</td><td>Caterina P.</td>
+            <td class="col-notes">First Multipitch for Caterina!</td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="43.2118" data-lng="5.4472" data-n="15" data-grade-max="6a+" data-grade-obl="5b+" data-pitches="3" data-length="90">
+            <td class="col-n">15</td><td class="col-name">Dièdre du Renard</td><td>Calanque de Morgiou</td><td>France</td>
+            <td class="col-date">March 2026</td><td class="col-grade">6a+</td><td class="col-grade">5b+</td>
+            <td class="col-num">3</td><td class="col-num">90</td>
+            <td class="col-onsight onsight-yes">Yes</td><td>Violette C.</td>
+            <td class="col-notes">Connected first 2 pitches</td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="43.2125" data-lng="5.4291" data-n="14" data-grade-max="6b" data-grade-obl="6a+" data-pitches="2" data-length="55">
+            <td class="col-n">14</td><td class="col-name">Jeu de mots</td><td>Calanque de Sormiou</td><td>France</td>
+            <td class="col-date">Feb 2026</td><td class="col-grade">6b</td><td class="col-grade">6a+</td>
+            <td class="col-num">2</td><td class="col-num">55</td>
+            <td class="col-onsight onsight-no">No</td><td>Violette C.</td>
+            <td class="col-notes"></td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="43.2128" data-lng="5.4286" data-n="13" data-grade-max="6a" data-grade-obl="5c" data-pitches="10" data-length="250">
+            <td class="col-n">13</td><td class="col-name">Grand traversée du Bec</td><td>Calanque de Sormiou</td><td>France</td>
+            <td class="col-date">Feb 2026</td><td class="col-grade">6a</td><td class="col-grade">5c</td>
+            <td class="col-num">10</td><td class="col-num">250</td>
+            <td class="col-onsight onsight-yes">Yes</td><td>Violette C.</td>
+            <td class="col-notes">Incredible traverse. Connected pitches — did 5 instead of 10</td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="44.3622" data-lng="10.4201" data-n="12" data-grade-max="7a+" data-grade-obl="7a" data-pitches="5" data-length="120">
+            <td class="col-n">12</td><td class="col-name">Anime di Piombo</td><td>Pietra di Bismantova</td><td>Italy</td>
+            <td class="col-date">Feb 2026</td><td class="col-grade">7a+</td><td class="col-grade">7a</td>
+            <td class="col-num">5</td><td class="col-num">120</td>
+            <td class="col-onsight onsight-no">No</td><td>Enrico B. &amp; Valerio</td>
+            <td class="col-notes">Led the first pitch, then my fight to follow those 2 young guns started</td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="43.2288" data-lng="5.4382" data-n="11" data-grade-max="4c" data-grade-obl="4b" data-pitches="4" data-length="100">
+            <td class="col-n">11</td><td class="col-name">Arête du Vallon</td><td>Luminy, Calanques</td><td>France</td>
+            <td class="col-date">Jan 2026</td><td class="col-grade">4c</td><td class="col-grade">4b</td>
+            <td class="col-num">4</td><td class="col-num">100</td>
+            <td class="col-onsight onsight-yes">Yes</td><td>Lucile F. &amp; Cheddar</td>
+            <td class="col-notes">Classic route</td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="43.2122" data-lng="5.4295" data-n="10" data-grade-max="5b+" data-grade-obl="5b" data-pitches="4" data-length="110">
+            <td class="col-n">10</td><td class="col-name">The big Lebowski</td><td>Calanque de Sormiou</td><td>France</td>
+            <td class="col-date">Jan 2026</td><td class="col-grade">5b+</td><td class="col-grade">5b</td>
+            <td class="col-num">4</td><td class="col-num">110</td>
+            <td class="col-onsight onsight-yes">Yes</td><td>Isa</td>
+            <td class="col-notes">First Gran Voie in the Calanques, also first one after herniated disk</td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="41.1458" data-lng="9.5112" data-n="9" data-grade-max="6b+" data-grade-obl="6a" data-pitches="4" data-length="100">
+            <td class="col-n">9</td><td class="col-name">Bionda Sardegna</td><td>Locherie, Sardinia</td><td>Italy</td>
+            <td class="col-date">Sept 2025</td><td class="col-grade">6b+</td><td class="col-grade">6a</td>
+            <td class="col-num">4</td><td class="col-num">100</td>
+            <td class="col-onsight onsight-no">No</td><td>Riccardo Montanari</td>
+            <td class="col-notes">Last 2 pitches Trad. One of the best multipitches I've done</td><td class="col-link"></td>
+          </tr>
+          <!-- Hidden rows (extra-mp) -->
+          <tr data-lat="41.1462" data-lng="9.511" class="extra-mp" data-n="8" data-grade-max="5b" data-grade-obl="5b" data-pitches="5" data-length="120">
+            <td class="col-n">8</td><td class="col-name">Via della Difesa</td><td>Sardegna</td><td>Italy</td>
+            <td class="col-date">Sept 2025</td><td class="col-grade">5b</td><td class="col-grade">5b</td>
+            <td class="col-num">5</td><td class="col-num">120</td>
+            <td class="col-onsight onsight-yes">Yes</td><td>Riccardo Montanari</td>
+            <td class="col-notes">All trad, easy adventurous climb</td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="42.3929" data-lng="11.1052" class="extra-mp" data-n="7" data-grade-max="6a+" data-grade-obl="5b" data-pitches="7" data-length="240">
+            <td class="col-n">7</td><td class="col-name">Spigolo Bonatti</td><td>Argentario, Toscana</td><td>Italy</td>
+            <td class="col-date">Aug 2025</td><td class="col-grade">6a+</td><td class="col-grade">5b</td>
+            <td class="col-num">7</td><td class="col-num">240</td>
+            <td class="col-onsight onsight-yes">Yes</td><td>Riccardo Montanari</td>
+            <td class="col-notes"></td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="44.3625" data-lng="10.4205" class="extra-mp" data-n="6" data-grade-max="6a" data-grade-obl="5c" data-pitches="4" data-length="120">
+            <td class="col-n">6</td><td class="col-name">Zuffa Lenzi</td><td>Pietra di Bismantova</td><td>Italy</td>
+            <td class="col-date">March 2025</td><td class="col-grade">6a</td><td class="col-grade">5c</td>
+            <td class="col-num">4</td><td class="col-num">120</td>
+            <td class="col-onsight onsight-no">No</td><td>Riccardo Montanari</td>
+            <td class="col-notes"></td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="45.4861" data-lng="7.4718" class="extra-mp" data-n="5" data-grade-max="5c" data-grade-obl="5b" data-pitches="3" data-length="100">
+            <td class="col-n">5</td><td class="col-name">Fessura per PA (variant)</td><td>Valle dell'Orco</td><td>Italy</td>
+            <td class="col-date">October 2024</td><td class="col-grade">5c</td><td class="col-grade">5b</td>
+            <td class="col-num">3</td><td class="col-num">100</td>
+            <td class="col-onsight onsight-yes">Yes</td><td>Riccardo Montanari</td>
+            <td class="col-notes">Trad</td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="45.4858" data-lng="7.4722" class="extra-mp" data-n="4" data-grade-max="5c" data-grade-obl="5b" data-pitches="3" data-length="100">
+            <td class="col-n">4</td><td class="col-name">Fessura per PA</td><td>Valle dell'Orco</td><td>Italy</td>
+            <td class="col-date">April 2024</td><td class="col-grade">5c</td><td class="col-grade">5b</td>
+            <td class="col-num">3</td><td class="col-num">100</td>
+            <td class="col-onsight onsight-yes">Yes</td><td>Riccardo Montanari</td>
+            <td class="col-notes">Trad</td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="44.3618" data-lng="10.4198" class="extra-mp" data-n="3" data-grade-max="5a" data-grade-obl="4" data-pitches="4" data-length="130">
+            <td class="col-n">3</td><td class="col-name">Zuffa Ruggero</td><td>Pietra di Bismantova</td><td>Italy</td>
+            <td class="col-date">April 2024</td><td class="col-grade">5a</td><td class="col-grade">IV</td>
+            <td class="col-num">4</td><td class="col-num">130</td>
+            <td class="col-onsight onsight-yes">Yes</td><td>Riccardo Montanari</td>
+            <td class="col-notes">Took the wrong route on last pitch</td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="44.3621" data-lng="10.4203" class="extra-mp" data-n="2" data-grade-max="5a" data-grade-obl="5a" data-pitches="4" data-length="120">
+            <td class="col-n">2</td><td class="col-name">Via Oppio</td><td>Pietra di Bismantova</td><td>Italy</td>
+            <td class="col-date">Oct 2023</td><td class="col-grade">5a</td><td class="col-grade">5a</td>
+            <td class="col-num">4</td><td class="col-num">120</td>
+            <td class="col-onsight onsight-yes">Yes</td><td>Riccardo Montanari</td>
+            <td class="col-notes">Cool route, definitely humbling as one of my first multipitches</td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="44.3988" data-lng="11.2748" class="extra-mp" data-n="1" data-grade-max="5c" data-grade-obl="5a" data-pitches="2" data-length="60">
+            <td class="col-n">1</td><td class="col-name">Multipitch di Badolo</td><td>Badolo</td><td>Italy</td>
+            <td class="col-date">Sept 2023</td><td class="col-grade">5c?</td><td class="col-grade">5a?</td>
+            <td class="col-num">2</td><td class="col-num">60</td>
+            <td class="col-onsight onsight-yes">Yes</td><td>Riccardo Montanari</td>
+            <td class="col-notes">First "Multipitch"</td><td class="col-link"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="see-more-wrap">
+      <button class="see-more-btn" id="mp-see-more">See more ↓</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ TRAD ══════════════════════════════ -->
+  <!--
+    HOW TO ADD A NEW ENTRY:
+    1. Add a new <tr> at the TOP of tbody
+    2. Set data-n, data-grade-max, data-length
+    3. Add data-lat="XX.XXXX" data-lng="Y.YYYY" if you have coordinates (route appears on map)
+    4. If hidden by default, add class="extra-trad"
+  -->
+  <div class="db-section">
+    <div class="section-header">
+      <div class="section-label">Trad Routes</div>
+      <span class="entry-count" id="trad-count"></span>
+    </div>
+    <div class="sort-controls">
+      <span class="sort-label">Sort by</span>
+      <button class="sort-btn active" data-tbody="trad-tbody" data-col="n" data-dir="desc">N <span>↓</span></button>
+      <button class="sort-btn" data-tbody="trad-tbody" data-col="grade-max" data-dir="desc">Grade <span>↓</span></button>
+      <button class="sort-btn" data-tbody="trad-tbody" data-col="length" data-dir="desc">Length <span>↓</span></button>
+    </div>
+    <div class="db-table-wrap">
+      <table class="db-table">
+        <thead>
+          <tr>
+            <th>N</th><th>Route</th><th>Area / Sector</th><th>Country</th><th>Date</th>
+            <th>Grade</th><th>Length (m)</th><th>Onsight</th><th>Partners</th><th>Notes</th><th>Link</th>
+          </tr>
+        </thead>
+        <tbody id="trad-tbody">
+          <tr data-lat="43.9688" data-lng="6.6678" data-n="27" data-grade-max="6c" data-length="18">
+            <td class="col-n">27</td><td class="col-name">Le mongols de droite</td><td>Annot</td><td>France</td>
+            <td class="col-date">May 2026</td><td class="col-grade">6c</td><td class="col-num">18</td>
+            <td class="col-onsight onsight-yes">No</td><td>Lorenzo C.</td><td class="col-notes">Need to do it clean</td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="43.9685" data-lng="6.6682" data-n="26" data-grade-max="6c" data-length="30">
+            <td class="col-n">26</td><td class="col-name">L'arche</td><td>Annot</td><td>France</td>
+            <td class="col-date">May 2026</td><td class="col-grade">6c</td><td class="col-num">30</td>
+            <td class="col-onsight onsight-yes">No</td><td>Lorenzo C.</td><td class="col-notes">Almost flashed it! Took a huge whip on a N4</td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="43.969" data-lng="6.6672" data-n="25" data-grade-max="6a+" data-length="15">
+            <td class="col-n">25</td><td class="col-name">Chauffe Marcel!</td><td>Annot</td><td>France</td>
+            <td class="col-date">May 2026</td><td class="col-grade">6a+(++)</td><td class="col-num">15</td>
+            <td class="col-onsight onsight-yes">No</td><td>Lorenzo C.</td><td class="col-notes">Almost flashed it!</td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="43.9692" data-lng="6.6668" data-n="24" data-grade-max="6b" data-length="17">
+            <td class="col-n">24</td><td class="col-name">Lake Placid</td><td>Annot</td><td>France</td>
+            <td class="col-date">May 2026</td><td class="col-grade">6b</td><td class="col-num">17</td>
+            <td class="col-onsight onsight-yes">Yes</td><td>Lorenzo C.</td><td class="col-notes"></td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="43.9687" data-lng="6.6675" data-n="23" data-grade-max="6a" data-length="20">
+            <td class="col-n">23</td><td class="col-name">Dedicata alla Val di Mello</td><td>Annot</td><td>France</td>
+            <td class="col-date">May 2026</td><td class="col-grade">6a</td><td class="col-num">20</td>
+            <td class="col-onsight onsight-yes">Yes</td><td>Lorenzo C.</td><td class="col-notes">An extra N5 would have been nice to have...</td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="43.9683" data-lng="6.668" data-n="22" data-grade-max="6a" data-length="18">
+            <td class="col-n">22</td><td class="col-name">Hand Training</td><td>Annot</td><td>France</td>
+            <td class="col-date">May 2026</td><td class="col-grade">6a</td><td class="col-num">18</td>
+            <td class="col-onsight onsight-yes">Yes</td><td>Lorenzo C.</td><td class="col-notes"></td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="43.212" data-lng="5.4288" data-n="21" data-grade-max="6a" data-length="25">
+            <td class="col-n">21</td><td class="col-name">Fissure Diagonale</td><td>Calanque de Sormiou</td><td>France</td>
+            <td class="col-date">Feb 2026</td><td class="col-grade">6a</td><td class="col-num">25</td>
+            <td class="col-onsight onsight-yes">Yes</td><td>Violette C.</td><td class="col-notes"></td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="45.4865" data-lng="7.4715" data-n="20" data-grade-max="6b" data-length="7">
+            <td class="col-n">20</td><td class="col-name">Kosterlitz</td><td>Valle dell'Orco</td><td>Italy</td>
+            <td class="col-date">Oct 2025</td><td class="col-grade">6b</td><td class="col-num">7</td>
+            <td class="col-onsight onsight-no">No</td><td></td><td class="col-notes"></td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="41.146" data-lng="9.5114" data-n="19" data-grade-max="6a" data-length="100">
+            <td class="col-n">19</td><td class="col-name">Bionda Sardegna</td><td>Locherie, Sardinia</td><td>Italy</td>
+            <td class="col-date">Aug 2025</td><td class="col-grade">6a</td><td class="col-num">100</td>
+            <td class="col-onsight onsight-no">No</td><td>Riccardo Montanari</td>
+            <td class="col-notes">2 pitches of this route were full trad</td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="41.2482" data-lng="9.1488" data-n="18" data-grade-max="5a" data-length="18">
+            <td class="col-n">18</td><td class="col-name">NA</td><td>Cala Spinosa, Sardinia</td><td>Italy</td>
+            <td class="col-date">Aug 2025</td><td class="col-grade">5a</td><td class="col-num">18</td>
+            <td class="col-onsight onsight-yes">Yes</td><td>Riccardo Montanari</td><td class="col-notes"></td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="41.248" data-lng="9.149" data-n="17" data-grade-max="4c" data-length="18">
+            <td class="col-n">17</td><td class="col-name">NA</td><td>Cala Spinosa, Sardinia</td><td>Italy</td>
+            <td class="col-date">Aug 2025</td><td class="col-grade">4c</td><td class="col-num">18</td>
+            <td class="col-onsight onsight-yes">Yes</td><td>Riccardo Montanari</td><td class="col-notes"></td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="41.2484" data-lng="9.1486" data-n="16" data-grade-max="5a" data-length="18">
+            <td class="col-n">16</td><td class="col-name">NA</td><td>Cala Spinosa, Sardinia</td><td>Italy</td>
+            <td class="col-date">Aug 2025</td><td class="col-grade">5a</td><td class="col-num">18</td>
+            <td class="col-onsight onsight-yes">Yes</td><td>Riccardo Montanari</td><td class="col-notes"></td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="46.1108" data-lng="8.3568" data-n="15" data-grade-max="5c" data-length="12">
+            <td class="col-n">15</td><td class="col-name">Ciao</td><td>Cadarese</td><td>Italy</td>
+            <td class="col-date">June 2025</td><td class="col-grade">5c</td><td class="col-num">12</td>
+            <td class="col-onsight onsight-no">No</td><td>Riccardo Montanari</td><td class="col-notes"></td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="46.111" data-lng="8.3572" data-n="14" data-grade-max="6a" data-length="25">
+            <td class="col-n">14</td><td class="col-name">Nn4</td><td>Cadarese</td><td>Italy</td>
+            <td class="col-date">June 2025</td><td class="col-grade">6a</td><td class="col-num">25</td>
+            <td class="col-onsight onsight-no">No</td><td>Riccardo Montanari</td>
+            <td class="col-notes">Felt on n.5</td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="46.1106" data-lng="8.3565" data-n="13" data-grade-max="5b" data-length="13">
+            <td class="col-n">13</td><td class="col-name">Sgrufola</td><td>Cadarese</td><td>Italy</td>
+            <td class="col-date">June 2025</td><td class="col-grade">5b</td><td class="col-num">13</td>
+            <td class="col-onsight onsight-yes">Yes</td><td>Riccardo Montanari</td><td class="col-notes"></td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="46.1112" data-lng="8.356" data-n="12" data-grade-max="5c" data-length="22">
+            <td class="col-n">12</td><td class="col-name">Purosangue</td><td>Cadarese</td><td>Italy</td>
+            <td class="col-date">June 2025</td><td class="col-grade">5c</td><td class="col-num">22</td>
+            <td class="col-onsight onsight-yes">Yes</td><td>Riccardo Montanari</td>
+            <td class="col-notes">Start was not easy</td><td class="col-link"></td>
+          </tr>
+          <!-- Hidden rows -->
+          <tr data-lat="46.1104" data-lng="8.3575" class="extra-trad" data-n="11" data-grade-max="5b" data-length="22">
+            <td class="col-n">11</td><td class="col-name">Corner Glove</td><td>Cadarese</td><td>Italy</td>
+            <td class="col-date">June 2025</td><td class="col-grade">5b</td><td class="col-num">22</td>
+            <td class="col-onsight onsight-yes">Yes</td><td>Riccardo Montanari</td><td class="col-notes"></td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="46.1115" data-lng="8.358" class="extra-trad" data-n="10" data-grade-max="5c" data-length="15">
+            <td class="col-n">10</td><td class="col-name">NA</td><td>Cadarese</td><td>Italy</td>
+            <td class="col-date">June 2025</td><td class="col-grade">5c</td><td class="col-num">15</td>
+            <td class="col-onsight onsight-yes">Yes</td><td>Riccardo Montanari</td>
+            <td class="col-notes">On the right of "Gin Lemon"</td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="45.487" data-lng="7.471" class="extra-trad" data-n="9" data-grade-max="5c" data-length="25">
+            <td class="col-n">9</td><td class="col-name">NA</td><td>Valle dell'Orco</td><td>Italy</td>
+            <td class="col-date">March 2025</td><td class="col-grade">5c</td><td class="col-num">25</td>
+            <td class="col-onsight onsight-yes">Yes</td><td>Riccardo Montanari</td>
+            <td class="col-notes">Actually sport route, but had many cracks so we did it Trad</td><td class="col-link"></td>
+          </tr>
+          <tr class="extra-trad" data-n="8" data-grade-max="6a" data-length="12">
+            <td class="col-n">8</td><td class="col-name">Piton</td><td>Valle dell'Orco</td><td>Italy</td>
+            <td class="col-date">Oct 2024</td><td class="col-grade">6a</td><td class="col-num">12</td>
+            <td class="col-onsight onsight-yes">Yes</td><td>Riccardo Montanari &amp; Simas</td><td class="col-notes"></td><td class="col-link"></td>
+          </tr>
+          <tr class="extra-trad" data-n="7" data-grade-max="5a" data-length="10">
+            <td class="col-n">7</td><td class="col-name">Mamba</td><td>Valle dell'Orco</td><td>Italy</td>
+            <td class="col-date">Oct 2024</td><td class="col-grade">5a</td><td class="col-num">10</td>
+            <td class="col-onsight onsight-yes">Yes</td><td>Riccardo Montanari</td><td class="col-notes"></td><td class="col-link"></td>
+          </tr>
+          <tr class="extra-trad" data-n="6" data-grade-max="4c" data-length="10">
+            <td class="col-n">6</td><td class="col-name">Viper</td><td>Valle dell'Orco</td><td>Italy</td>
+            <td class="col-date">Oct 2024</td><td class="col-grade">4c</td><td class="col-num">10</td>
+            <td class="col-onsight onsight-yes">Yes</td><td>Riccardo Montanari</td><td class="col-notes"></td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="45.486" data-lng="7.4725" class="extra-trad" data-n="5" data-grade-max="5c" data-length="22">
+            <td class="col-n">5</td><td class="col-name">Cochise (L1)</td><td>Valle dell'Orco</td><td>Italy</td>
+            <td class="col-date">Oct 2024</td><td class="col-grade">5c</td><td class="col-num">22</td>
+            <td class="col-onsight onsight-no">No</td><td>Riccardo Montanari</td>
+            <td class="col-notes">First Trad whip</td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="45.4855" data-lng="7.4728" class="extra-trad" data-n="4" data-grade-max="5c" data-length="18">
+            <td class="col-n">4</td><td class="col-name">Paperoga</td><td>Valle dell'Orco</td><td>Italy</td>
+            <td class="col-date">Oct 2024</td><td class="col-grade">5c</td><td class="col-num">18</td>
+            <td class="col-onsight onsight-yes">Yes</td><td>Riccardo Montanari</td><td class="col-notes"></td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="45.4868" data-lng="7.4718" class="extra-trad" data-n="3" data-grade-max="5c" data-length="100">
+            <td class="col-n">3</td><td class="col-name">Fessura per PA (variant)</td><td>Valle dell'Orco</td><td>Italy</td>
+            <td class="col-date">Oct 2024</td><td class="col-grade">5c</td><td class="col-num">100</td>
+            <td class="col-onsight onsight-yes">Yes</td><td>Riccardo Montanari</td>
+            <td class="col-notes">Multipitch</td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="45.4872" data-lng="7.4714" class="extra-trad" data-n="2" data-grade-max="5c" data-length="100">
+            <td class="col-n">2</td><td class="col-name">Fessura per PA</td><td>Valle dell'Orco</td><td>Italy</td>
+            <td class="col-date">April 2024</td><td class="col-grade">5c</td><td class="col-num">100</td>
+            <td class="col-onsight onsight-yes">Yes</td><td>Riccardo Montanari</td>
+            <td class="col-notes">Multipitch</td><td class="col-link"></td>
+          </tr>
+          <tr data-lat="45.4858" data-lng="7.4723" class="extra-trad" data-n="1" data-grade-max="5c" data-length="13">
+            <td class="col-n">1</td><td class="col-name">NA</td><td>Valle dell'Orco</td><td>Italy</td>
+            <td class="col-date">April 2024</td><td class="col-grade">5c</td><td class="col-num">13</td>
+            <td class="col-onsight onsight-yes">Yes</td><td>Riccardo Montanari</td>
+            <td class="col-notes">Diagonal crack below Sergent with a sling on top</td><td class="col-link"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="see-more-wrap">
+      <button class="see-more-btn" id="trad-see-more">See more ↓</button>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-left">© <span id="year"></span> Your Name · Personal</div>
+  <a href="../index.html" class="footer-pro">Professional site</a>
+</footer>
+
+<script>
+  const SITE_KEY = 'personal-theme', DEFAULT = 'light';
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    const d = theme === 'dark';
+    document.getElementById('themeToggle').textContent = d ? '☀ Light' : '☾ Dark';
+    document.getElementById('drawerThemeBtn').textContent = d ? '☀ Switch to Light' : '☾ Switch to Dark';
+    try { localStorage.setItem(SITE_KEY, theme); } catch(e) {}
+  }
+  function toggleTheme() { applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'); }
+  (function() { let s; try { s = localStorage.getItem(SITE_KEY); } catch(e) {} applyTheme(s || DEFAULT); })();
+  document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+  document.getElementById('drawerThemeBtn').addEventListener('click', toggleTheme);
+  document.getElementById('year').textContent = new Date().getFullYear();
+  const burger = document.getElementById('burger'), navDrawer = document.getElementById('drawer');
+  burger.addEventListener('click', () => {
+    const open = navDrawer.classList.toggle('open');
+    burger.classList.toggle('open', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+  navDrawer.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    navDrawer.classList.remove('open'); burger.classList.remove('open'); document.body.style.overflow = '';
+  }));
+
+  // ── Grade ranking ──
+  const GRADE_RANK = {};
+  ['3','3+','4','4+','4a','4b','4c','5','5+','5a','5b','5b+','5c','5c+',
+   '6a','6a+','6b','6b+','6c','6c+','7a','7a+','7b','7b+','7c','7c+','8a','8a+','8b','8b+','8c','8c+','9a']
+    .forEach((g, i) => { GRADE_RANK[g] = i + 10; });
+  ['I','I+','II','II+','III','III-','III+','IV','IV-','IV+','V','V-','V+','VI','VI-','VI+','VII','VII-','VII+']
+    .forEach((g, i) => { GRADE_RANK[g] = i + 1; });
+
+  function gradeVal(raw) {
+    if (!raw) return -1;
+    const g = raw.trim().replace('?','');
+    return GRADE_RANK[g] ?? GRADE_RANK[g.toLowerCase()] ?? -1;
+  }
+
+  function sortTable(tbodyId, col, dir) {
+    const tbody = document.getElementById(tbodyId);
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    rows.sort((a, b) => {
+      let va = 0, vb = 0;
+      if (col === 'n')          { va = +a.dataset.n;          vb = +b.dataset.n; }
+      else if (col === 'grade-max') { va = gradeVal(a.dataset.gradeMax); vb = gradeVal(b.dataset.gradeMax); }
+      else if (col === 'grade-obl') { va = gradeVal(a.dataset.gradeObl); vb = gradeVal(b.dataset.gradeObl); }
+      else if (col === 'pitches')   { va = +a.dataset.pitches;  vb = +b.dataset.pitches; }
+      else if (col === 'length')    { va = +a.dataset.length;   vb = +b.dataset.length; }
+      return dir === 'desc' ? vb - va : va - vb;
+    });
+    rows.forEach(r => tbody.appendChild(r));
+  }
+
+  // ── Sort buttons ──
+  document.querySelectorAll('.sort-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const siblings = btn.closest('.sort-controls').querySelectorAll('.sort-btn');
+      if (btn.classList.contains('active')) {
+        btn.dataset.dir = btn.dataset.dir === 'desc' ? 'asc' : 'desc';
+      } else {
+        siblings.forEach(b => { b.classList.remove('active'); b.dataset.dir = 'desc'; b.querySelector('span').textContent = '↓'; });
+        btn.classList.add('active');
+        btn.dataset.dir = 'desc';
+      }
+      btn.querySelector('span').textContent = btn.dataset.dir === 'desc' ? '↓' : '↑';
+      sortTable(btn.dataset.tbody, btn.dataset.col, btn.dataset.dir);
+    });
+  });
+
+  // ── See more ──
+  function setupSeeMore(btnId, extraClass) {
+    const btn = document.getElementById(btnId);
+    const rows = () => document.querySelectorAll('.' + extraClass);
+    rows().forEach(r => r.style.display = 'none');
+    if (rows().length === 0) { btn.style.display = 'none'; return; }
+    btn.addEventListener('click', () => {
+      const expanded = btn.classList.toggle('expanded');
+      rows().forEach(r => r.style.display = expanded ? '' : 'none');
+      btn.textContent = expanded ? 'Show less ↑' : 'See more ↓';
+    });
+  }
+  setupSeeMore('mp-see-more', 'extra-mp');
+  setupSeeMore('trad-see-more', 'extra-trad');
+
+  // ── Entry counts ──
+  document.getElementById('mp-count').textContent = document.querySelectorAll('#mp-tbody tr').length + ' routes';
+  document.getElementById('trad-count').textContent = document.querySelectorAll('#trad-tbody tr').length + ' routes';
+  // ── Climbing Map ──────────────────────────────────────────
+  // Stable jitter: gives every route a tiny, consistent positional offset
+  // so routes with identical coords fan out cleanly on the map.
+  function stableJitter(seed) {
+    let h = 0;
+    for (let i = 0; i < seed.length; i++) h = (Math.imul(31, h) + seed.charCodeAt(i)) | 0;
+    return ((h >>> 0) % 1000 - 500) * 0.0000004;
+  }
+
+  // Read all routes directly from the table rows
+  function getRoutesFromDOM(filter) {
+    const routes = [];
+
+    document.querySelectorAll('#mp-tbody tr').forEach(tr => {
+      if (filter === 'trad') return;
+      const lat = parseFloat(tr.dataset.lat);
+      const lng = parseFloat(tr.dataset.lng);
+      if (!lat || !lng) return;
+      const c = tr.querySelectorAll('td');
+      const name    = c[1]?.textContent.trim() || '';
+      const area    = c[2]?.textContent.trim() || '';
+      const country = c[3]?.textContent.trim() || '';
+      const date    = c[4]?.textContent.trim() || '';
+      const gradeMax = c[5]?.textContent.trim() || '';
+      const gradeObl = c[6]?.textContent.trim() || '';
+      const pitches  = c[7]?.textContent.trim() || '';
+      const length   = c[8]?.textContent.trim() || '';
+      const seed = name + date;
+      routes.push({ type: 'mp', name, area, country, date,
+        grade: gradeObl ? `${gradeMax} / ${gradeObl}` : gradeMax,
+        pitches, length,
+        lat: lat + stableJitter(seed + 'lat'),
+        lng: lng + stableJitter(seed + 'lng') });
+    });
+
+    document.querySelectorAll('#trad-tbody tr').forEach(tr => {
+      if (filter === 'mp') return;
+      const lat = parseFloat(tr.dataset.lat);
+      const lng = parseFloat(tr.dataset.lng);
+      if (!lat || !lng) return;
+      const c = tr.querySelectorAll('td');
+      const name    = c[1]?.textContent.trim() || '';
+      const area    = c[2]?.textContent.trim() || '';
+      const country = c[3]?.textContent.trim() || '';
+      const date    = c[4]?.textContent.trim() || '';
+      const grade   = c[5]?.textContent.trim() || '';
+      const length  = c[6]?.textContent.trim() || '';
+      const seed = name + date;
+      routes.push({ type: 'trad', name, area, country, date, grade, length,
+        lat: lat + stableJitter(seed + 'lat'),
+        lng: lng + stableJitter(seed + 'lng') });
+    });
+
+    return routes;
+  }
+
+  // ⛰ = multipitch (mountain)   🪨 = trad (boulder/rock)
+  // Emoji rendered inside a teardrop SVG pin, coloured per category
+  function makeIcon(type) {
+    const isMp  = type === 'mp';
+    const color = isMp ? '#6b5c3e' : '#3d6b4f';
+    const emoji = isMp ? '&#x26F0;' : '&#x1FAA8;';
+    const html = `<div style="position:relative;width:38px;height:48px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="38" height="48" viewBox="0 0 38 48" style="position:absolute;top:0;left:0;">
+          <path d="M19 1C9.06 1 1 9.06 1 19c0 13.25 18 28 18 28s18-14.75 18-28C37 9.06 28.94 1 19 1z"
+                fill="${color}" stroke="white" stroke-width="1.8"/>
+        </svg>
+        <div style="position:absolute;top:3px;left:0;width:38px;height:34px;display:flex;align-items:center;justify-content:center;font-size:16px;line-height:1;">${emoji}</div>
+      </div>`;
+    return L.divIcon({ html, className: '', iconSize: [38, 48], iconAnchor: [19, 48], popupAnchor: [0, -50] });
+  }
+
+  function buildPopup(r) {
+    const label = r.type === 'mp' ? 'Multipitch' : 'Trad';
+    const meta  = r.type === 'mp'
+      ? `${r.pitches} pitches &middot; ${r.length}m &middot; ${r.date}`
+      : `${r.length}m &middot; ${r.date}`;
+    return `<div style="min-width:170px">
+      <div class="popup-name">${r.name}</div>
+      <div class="popup-area">${r.area}, ${r.country}</div>
+      <span class="popup-badge ${r.type}">${label}</span>
+      <div class="popup-grade">${r.grade}</div>
+      <div class="popup-meta">${meta}</div>
+    </div>`;
+  }
+
+  let climbingMap = null;
+  let activeFilter = 'all';
+  let clusterGroup = null;
+
+  function renderMarkers() {
+    if (!climbingMap) return;
+    if (clusterGroup) climbingMap.removeLayer(clusterGroup);
+
+    clusterGroup = L.markerClusterGroup({
+      showCoverageOnHover: false,
+      maxClusterRadius: 55,
+      spiderfyOnMaxZoom: true,
+      zoomToBoundsOnClick: true,
+      iconCreateFunction(cluster) {
+        const kids = cluster.getAllChildMarkers();
+        const hasMP   = kids.some(m => m.options.rtype === 'mp');
+        const hasTrad = kids.some(m => m.options.rtype === 'trad');
+        const cls = (hasMP && hasTrad) ? 'cluster-mixed' : hasMP ? 'cluster-mp' : 'cluster-trad';
+        const n   = cluster.getChildCount();
+        const sz  = n < 5 ? 36 : n < 10 ? 44 : 52;
+        return L.divIcon({
+          html: `<div class="custom-cluster ${cls}" style="width:${sz}px;height:${sz}px">${n}</div>`,
+          className: '', iconSize: [sz, sz], iconAnchor: [sz/2, sz/2]
+        });
+      }
+    });
+
+    const routes = getRoutesFromDOM(activeFilter);
+    const leafletMarkers = [];
+
+    routes.forEach(r => {
+      // Emoji teardrop pin — ⛰ for multipitch, 🪨 for trad
+      const marker = L.marker([r.lat, r.lng], { icon: makeIcon(r.type), rtype: r.type })
+        .bindPopup(buildPopup(r), { maxWidth: 240 });
+      leafletMarkers.push(marker);
+      clusterGroup.addLayer(marker);
+    });
+
+    climbingMap.addLayer(clusterGroup);
+    if (leafletMarkers.length > 0) {
+      climbingMap.fitBounds(L.featureGroup(leafletMarkers).getBounds().pad(0.12));
+    }
+  }
+
+  function initMap() {
+    if (climbingMap) return;
+    climbingMap = L.map('climbingMap', { zoomControl: true }).setView([44, 8], 5);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
+      subdomains: 'abcd', maxZoom: 19
+    }).addTo(climbingMap);
+    renderMarkers();
+  }
+
+  // Toggle map open/close
+  document.getElementById('openMapBtn').addEventListener('click', function() {
+    const container = document.getElementById('mapContainer');
+    const open = container.style.display === 'none';
+    container.style.display = open ? 'block' : 'none';
+    this.textContent = open ? 'Close the Map ↙' : 'Open the Map ↗';
+    this.classList.toggle('active', open);
+    if (open) { initMap(); setTimeout(() => climbingMap && climbingMap.invalidateSize(), 120); }
+  });
+
+  // Filter buttons
+  document.querySelectorAll('.map-filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.map-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeFilter = btn.dataset.filter;
+      renderMarkers();
+    });
+  });
+
+</script>
+</body>
+</html>
